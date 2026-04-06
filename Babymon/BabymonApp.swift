@@ -6,6 +6,9 @@ struct BabymonApp: App {
 
     init() {
         ConnectivityManager.shared.activate()
+        #if targetEnvironment(simulator)
+        ConnectivityManager.shared.enableDemoMode()
+        #endif
     }
 
     var body: some Scene {

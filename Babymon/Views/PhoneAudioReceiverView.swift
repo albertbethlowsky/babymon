@@ -74,9 +74,11 @@ struct PhoneAudioReceiverView: View {
             .padding(.bottom, 40)
         }
         .onAppear {
-            audioPlayer.setup()
-            connectivity.onAudioDataReceived = { data in
-                audioPlayer.playAudioData(data)
+            if !connectivity.isDemoMode {
+                audioPlayer.setup()
+                connectivity.onAudioDataReceived = { data in
+                    audioPlayer.playAudioData(data)
+                }
             }
             isActive = true
             startTimer()

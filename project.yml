@@ -25,9 +25,6 @@ targets:
     entitlements:
       path: Babymon/Babymon.entitlements
       properties: {}
-    dependencies:
-      - target: BabymonWatch
-
   BabymonWatch:
     type: application
     platform: watchOS

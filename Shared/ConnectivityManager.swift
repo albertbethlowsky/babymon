@@ -7,6 +7,7 @@ class ConnectivityManager: NSObject, ObservableObject {
     @Published var isReachable = false
     @Published var currentMode: SessionMode? = nil
     @Published var isStreaming = false
+    @Published var isDemoMode = false
 
     var onAudioDataReceived: ((Data) -> Void)?
     var onVideoDataReceived: ((Data) -> Void)?
@@ -17,12 +18,28 @@ class ConnectivityManager: NSObject, ObservableObject {
     }
 
     func activate() {
+        #if targetEnvironment(simulator)
+        // WCSession is not supported in the Simulator
+        return
+        #else
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
+        #endif
+    }
+
+    func enableDemoMode() {
+        isDemoMode = true
+        isReachable = true
+    }
+
+    func disableDemoMode() {
+        isDemoMode = false
+        isReachable = WCSession.isSupported() ? WCSession.default.isReachable : false
     }
 
     func sendStreamData(_ data: Data) {
+        if isDemoMode { return }
         guard WCSession.default.isReachable else { return }
         WCSession.default.sendMessageData(data, replyHandler: nil) { error in
             print("Send error: \(error.localizedDescription)")
@@ -30,6 +47,7 @@ class ConnectivityManager: NSObject, ObservableObject {
     }
 
     func sendModeSelection(_ mode: SessionMode) {
+        if isDemoMode { return }
         guard WCSession.default.isReachable else { return }
         let message = ["mode": mode.rawValue]
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
@@ -42,7 +60,9 @@ class ConnectivityManager: NSObject, ObservableObject {
         isStreaming = false
         onAudioDataReceived = nil
         onVideoDataReceived = nil
-        sendModeSelection(.phoneSource) // Signal stop — counterpart checks for mode change
+        if !isDemoMode {
+            sendModeSelection(.phoneSource)
+        }
     }
 }
 

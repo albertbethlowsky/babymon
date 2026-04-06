@@ -5,83 +5,98 @@ struct ModeSelectionView: View {
     @State private var appeared = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: 0) {
+                // App icon + title
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .fill(BabymonTheme.accent.opacity(0.1))
+                            .frame(width: 80, height: 80)
+                        Circle()
+                            .fill(BabymonTheme.accent.opacity(0.06))
+                            .frame(width: 105, height: 105)
+                        Image(systemName: "moon.stars.fill")
+                            .font(.system(size: 34))
+                            .foregroundStyle(BabymonTheme.accentGradient)
+                    }
+                    .scaleEffect(appeared ? 1 : 0.6)
+                    .opacity(appeared ? 1 : 0)
 
-            // App icon + title
-            VStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(BabymonTheme.accent.opacity(0.1))
-                        .frame(width: 100, height: 100)
-                    Circle()
-                        .fill(BabymonTheme.accent.opacity(0.06))
-                        .frame(width: 130, height: 130)
-                    Image(systemName: "moon.stars.fill")
-                        .font(.system(size: 42))
-                        .foregroundStyle(BabymonTheme.accentGradient)
+                    Text("Babymon")
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+
+                    Text("Keep an eye on your little one")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.5))
                 }
-                .scaleEffect(appeared ? 1 : 0.6)
-                .opacity(appeared ? 1 : 0)
-
-                Text("Babymon")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-
-                Text("Keep an eye on your little one")
-                    .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.5))
-            }
-            .padding(.bottom, 48)
-
-            // Status
-            StatusPill(isConnected: connectivity.isReachable)
-                .padding(.bottom, 32)
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 10)
-
-            // Mode cards
-            VStack(spacing: 16) {
-                ModeCard(
-                    icon: "video.fill",
-                    title: "Video Monitor",
-                    subtitle: "Stream iPhone camera & audio to your Watch",
-                    gradient: BabymonTheme.accentGradient,
-                    iconColor: BabymonTheme.accentLight,
-                    disabled: !connectivity.isReachable
-                ) {
-                    connectivity.currentMode = .phoneSource
-                    connectivity.sendModeSelection(.phoneSource)
+                .padding(.top, 20)
+                .padding(.bottom, 16)
+                // Long-press the logo to enable demo mode on a real device
+                .onLongPressGesture(minimumDuration: 2) {
+                    if !connectivity.isDemoMode {
+                        connectivity.enableDemoMode()
+                    }
                 }
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 30)
 
-                ModeCard(
-                    icon: "waveform",
-                    title: "Audio Monitor",
-                    subtitle: "Listen to your Watch microphone on iPhone",
-                    gradient: BabymonTheme.greenGradient,
-                    iconColor: BabymonTheme.softGreen,
-                    disabled: !connectivity.isReachable
-                ) {
-                    connectivity.currentMode = .watchSource
-                    connectivity.sendModeSelection(.watchSource)
+                // Status
+                StatusPill(isConnected: connectivity.isReachable)
+                    .padding(.bottom, 20)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 10)
+
+                // Mode cards
+                VStack(spacing: 16) {
+                    ModeCard(
+                        icon: "video.fill",
+                        title: "Video Monitor",
+                        subtitle: "Stream iPhone camera & audio to your Watch",
+                        gradient: BabymonTheme.accentGradient,
+                        iconColor: BabymonTheme.accentLight,
+                        disabled: !connectivity.isReachable
+                    ) {
+                        connectivity.currentMode = .phoneSource
+                        connectivity.sendModeSelection(.phoneSource)
+                    }
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 30)
+
+                    ModeCard(
+                        icon: "waveform",
+                        title: "Audio Monitor",
+                        subtitle: "Listen to your Watch microphone on iPhone",
+                        gradient: BabymonTheme.greenGradient,
+                        iconColor: BabymonTheme.softGreen,
+                        disabled: !connectivity.isReachable
+                    ) {
+                        connectivity.currentMode = .watchSource
+                        connectivity.sendModeSelection(.watchSource)
+                    }
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 40)
                 }
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 40)
-            }
-            .padding(.horizontal, 20)
+                .padding(.horizontal, 20)
 
-            Spacer()
-
-            if !connectivity.isReachable {
-                Text("Open Babymon on your Apple Watch to connect")
-                    .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.35))
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 24)
+                // Footer
+                Group {
+                    if !connectivity.isReachable && !connectivity.isDemoMode {
+                        Text("Open Babymon on your Apple Watch to connect")
+                            .font(.footnote)
+                            .foregroundStyle(.white.opacity(0.35))
+                            .multilineTextAlignment(.center)
+                    } else if connectivity.isDemoMode {
+                        Text("Demo Mode")
+                            .font(.caption2)
+                            .foregroundStyle(BabymonTheme.warmOrange.opacity(0.6))
+                    }
+                }
+                .padding(.top, 32)
+                .padding(.bottom, 40)
             }
+            .frame(maxWidth: .infinity)
         }
+        .scrollIndicators(.hidden)
         .onAppear {
             withAnimation(.spring(duration: 0.8, bounce: 0.3)) {
                 appeared = true

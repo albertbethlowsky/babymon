@@ -26,37 +26,12 @@
 		BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
 		D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */; };
 		DF78002B6550C22F6B246252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EF483BA363B1D6F1358CFB /* Assets.xcassets */; };
-		E18C28A2C84FD709A85625BF /* BabymonWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7000131F425B22BDFFA5675B /* BabymonWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E38CDAD4A0CBF3611343D4B5 /* WatchModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */; };
 		E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
 		F7AFBE8B51F0A485ACF731F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5506FDF805A37D0CA9ED3E90 /* Assets.xcassets */; };
 		FABC577BD671923169396A7B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE53017850CFAEA6ED0678A /* ContentView.swift */; };
 		FCE25C38D28EA15E5946E2C5 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		8FBF1BEDFD129562EAB1C8FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 716076477C6368563B263F65 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5EF4720841D50CDB0FDA599B;
-			remoteInfo = BabymonWatch;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		5FE7C9E41A2B2C465BD54165 /* Embed Watch Content */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
-			dstSubfolderSpec = 16;
-			files = (
-				E18C28A2C84FD709A85625BF /* BabymonWatch.app in Embed Watch Content */,
-			);
-			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		09D9A42CC239946176FFD25B /* StreamingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingProtocol.swift; sourceTree = "<group>"; };
@@ -189,12 +164,10 @@
 			buildPhases = (
 				F21E1B1FB1DCE7887EC73787 /* Sources */,
 				86708C2E4CECC36C129CC8D9 /* Resources */,
-				5FE7C9E41A2B2C465BD54165 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D160E50FCCD6C669939C6B17 /* PBXTargetDependency */,
 			);
 			name = Babymon;
 			packageProductDependencies = (
@@ -309,14 +282,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D160E50FCCD6C669939C6B17 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5EF4720841D50CDB0FDA599B /* BabymonWatch */;
-			targetProxy = 8FBF1BEDFD129562EAB1C8FB /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		343041E2C8684D5F7D408BCB /* Debug */ = {

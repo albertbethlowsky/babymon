@@ -9,12 +9,20 @@ struct PhoneCameraSourceView: View {
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
 
+    private var isDemo: Bool { connectivity.isDemoMode }
+
     var body: some View {
         ZStack {
-            if permissionGranted {
-                // Full-screen camera preview
-                CameraPreviewView(session: captureManager.session)
-                    .ignoresSafeArea()
+            if permissionGranted || isDemo {
+                // Full-screen camera preview (or mock in demo)
+                Group {
+                    if isDemo {
+                        MockCameraView()
+                    } else {
+                        CameraPreviewView(session: captureManager.session)
+                    }
+                }
+                .ignoresSafeArea()
 
                 // Top overlay
                 VStack {
@@ -34,7 +42,7 @@ struct PhoneCameraSourceView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "applewatch")
                             .font(.system(size: 12))
-                        Text("Streaming to Apple Watch")
+                        Text(isDemo ? "Demo Mode — Streaming to Watch" : "Streaming to Apple Watch")
                             .font(.system(size: 13, weight: .medium))
                     }
                     .foregroundStyle(.white.opacity(0.8))
@@ -89,6 +97,12 @@ struct PhoneCameraSourceView: View {
             }
         }
         .task {
+            if isDemo {
+                // Skip permissions in demo mode
+                startTimer()
+                withAnimation(.easeOut(duration: 0.5)) { appeared = true }
+                return
+            }
             await requestPermissions()
             if permissionGranted {
                 captureManager.onFrameReady = { data in
@@ -131,6 +145,81 @@ struct PhoneCameraSourceView: View {
         }
     }
 }
+
+// MARK: - Mock Camera for Simulator
+
+struct MockCameraView: View {
+    @State private var shimmerOffset: CGFloat = -1
+
+    var body: some View {
+        ZStack {
+            // Simulated dark room / nursery background
+            LinearGradient(
+                colors: [
+                    Color(red: 0.08, green: 0.10, blue: 0.14),
+                    Color(red: 0.12, green: 0.10, blue: 0.18),
+                    Color(red: 0.06, green: 0.08, blue: 0.12)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            // Simulated night-vision scene elements
+            VStack(spacing: 0) {
+                Spacer()
+
+                // Crib outline
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(.white.opacity(0.08), lineWidth: 1.5)
+                        .frame(width: 220, height: 140)
+
+                    // Baby silhouette
+                    Image(systemName: "figure.child")
+                        .font(.system(size: 50))
+                        .foregroundStyle(.white.opacity(0.12))
+
+                    // Night vision scanline effect
+                    Rectangle()
+                        .fill(
+                            LinearGradient(
+                                colors: [.clear, .green.opacity(0.03), .clear],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .frame(height: 60)
+                        .offset(y: shimmerOffset * 70)
+                }
+
+                Spacer()
+            }
+
+            // Subtle noise overlay
+            Rectangle()
+                .fill(.white.opacity(0.015))
+
+            // Corner timestamp (like a real camera)
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Text("CAM 1")
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.2))
+                        .padding(12)
+                }
+            }
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                shimmerOffset = 1
+            }
+        }
+    }
+}
+
+// MARK: - Real Camera Preview
 
 struct CameraPreviewView: UIViewRepresentable {
     let session: AVCaptureSession
