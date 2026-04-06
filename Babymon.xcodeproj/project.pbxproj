@@ -1,0 +1,523 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		124C189401CC1C7D977343FE /* WatchAudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AE93F18D7BF9F6BF7D980 /* WatchAudioPlayerManager.swift */; };
+		22AF56839DF871D9A1F82E5A /* WatchAudioSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE400E998E1B54C9C3597DEC /* WatchAudioSourceView.swift */; };
+		2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */; };
+		2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
+		4AD2B9B3AD73299D54FDB1D2 /* SessionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */; };
+		55323562D1488D2D73AFB01A /* ModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */; };
+		6975F0864DCAE5DA2CB120BC /* WatchVideoReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */; };
+		6A8E414583C3432468907379 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */; };
+		73A659E1752B43674BDF08B7 /* BabymonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */; };
+		7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
+		80DAB2C99743C4CB8AAC1CFA /* CameraCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3169286872AF40174CED573 /* CameraCaptureManager.swift */; };
+		8B641B88B70BE031269DA166 /* WatchAudioCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */; };
+		9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */; };
+		B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */; };
+		BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
+		D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */; };
+		E18C28A2C84FD709A85625BF /* BabymonWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7000131F425B22BDFFA5675B /* BabymonWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E38CDAD4A0CBF3611343D4B5 /* WatchModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */; };
+		E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
+		FABC577BD671923169396A7B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE53017850CFAEA6ED0678A /* ContentView.swift */; };
+		FCE25C38D28EA15E5946E2C5 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8FBF1BEDFD129562EAB1C8FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 716076477C6368563B263F65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EF4720841D50CDB0FDA599B;
+			remoteInfo = BabymonWatch;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5FE7C9E41A2B2C465BD54165 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				E18C28A2C84FD709A85625BF /* BabymonWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		09D9A42CC239946176FFD25B /* StreamingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingProtocol.swift; sourceTree = "<group>"; };
+		1507C3223FDA1F4A2EABBD52 /* Babymon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Babymon.entitlements; sourceTree = "<group>"; };
+		3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchModeSelectionView.swift; sourceTree = "<group>"; };
+		4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelectionView.swift; sourceTree = "<group>"; };
+		43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		498293C8734027D5FA7004BB /* BabymonWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabymonWatch.entitlements; sourceTree = "<group>"; };
+		7000131F425B22BDFFA5675B /* BabymonWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabymonWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabymonApp.swift; sourceTree = "<group>"; };
+		7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionMode.swift; sourceTree = "<group>"; };
+		8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioCaptureManager.swift; sourceTree = "<group>"; };
+		84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAudioReceiverView.swift; sourceTree = "<group>"; };
+		8CE53017850CFAEA6ED0678A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabymonWatchApp.swift; sourceTree = "<group>"; };
+		9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchVideoReceiverView.swift; sourceTree = "<group>"; };
+		A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
+		BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCameraSourceView.swift; sourceTree = "<group>"; };
+		D9E241D98A0B492D9E23C563 /* Babymon.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Babymon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E21AE93F18D7BF9F6BF7D980 /* WatchAudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioPlayerManager.swift; sourceTree = "<group>"; };
+		EE400E998E1B54C9C3597DEC /* WatchAudioSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioSourceView.swift; sourceTree = "<group>"; };
+		F3169286872AF40174CED573 /* CameraCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureManager.swift; sourceTree = "<group>"; };
+		F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		106420ACECDD4CA7EE8A548F /* BabymonWatch */ = {
+			isa = PBXGroup;
+			children = (
+				498293C8734027D5FA7004BB /* BabymonWatch.entitlements */,
+				8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */,
+				F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */,
+				84927EF70639EDBADAF191B1 /* Capture */,
+				29EE247769A7074812366405 /* Views */,
+			);
+			path = BabymonWatch;
+			sourceTree = "<group>";
+		};
+		119F042B4429C1CBEC995CBD = {
+			isa = PBXGroup;
+			children = (
+				AB8A8BA802794A2D69A95910 /* Babymon */,
+				106420ACECDD4CA7EE8A548F /* BabymonWatch */,
+				828C819030BFDEF4802B8429 /* Shared */,
+				3A19772C2AD32D1859FB0A7E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		29EE247769A7074812366405 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EE400E998E1B54C9C3597DEC /* WatchAudioSourceView.swift */,
+				3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */,
+				9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3A19772C2AD32D1859FB0A7E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9E241D98A0B492D9E23C563 /* Babymon.app */,
+				7000131F425B22BDFFA5675B /* BabymonWatch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		828C819030BFDEF4802B8429 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */,
+				7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */,
+				09D9A42CC239946176FFD25B /* StreamingProtocol.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		84927EF70639EDBADAF191B1 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */,
+				E21AE93F18D7BF9F6BF7D980 /* WatchAudioPlayerManager.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		900308892660E9950E2D1A84 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */,
+				84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */,
+				BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AB8A8BA802794A2D69A95910 /* Babymon */ = {
+			isa = PBXGroup;
+			children = (
+				1507C3223FDA1F4A2EABBD52 /* Babymon.entitlements */,
+				7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */,
+				8CE53017850CFAEA6ED0678A /* ContentView.swift */,
+				F0661829000F179F859E3F19 /* Capture */,
+				900308892660E9950E2D1A84 /* Views */,
+			);
+			path = Babymon;
+			sourceTree = "<group>";
+		};
+		F0661829000F179F859E3F19 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */,
+				F3169286872AF40174CED573 /* CameraCaptureManager.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4821321B0FF8BC97349FF322 /* Babymon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 597994A89EA6D26A74C8805D /* Build configuration list for PBXNativeTarget "Babymon" */;
+			buildPhases = (
+				F21E1B1FB1DCE7887EC73787 /* Sources */,
+				5FE7C9E41A2B2C465BD54165 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D160E50FCCD6C669939C6B17 /* PBXTargetDependency */,
+			);
+			name = Babymon;
+			packageProductDependencies = (
+			);
+			productName = Babymon;
+			productReference = D9E241D98A0B492D9E23C563 /* Babymon.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5EF4720841D50CDB0FDA599B /* BabymonWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 62FECED9AAB40CAF86B6C51F /* Build configuration list for PBXNativeTarget "BabymonWatch" */;
+			buildPhases = (
+				F898A55715413EF1DDDE973A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BabymonWatch;
+			packageProductDependencies = (
+			);
+			productName = BabymonWatch;
+			productReference = 7000131F425B22BDFFA5675B /* BabymonWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		716076477C6368563B263F65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = DEC2B17178254006A159AE18 /* Build configuration list for PBXProject "Babymon" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 119F042B4429C1CBEC995CBD;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3A19772C2AD32D1859FB0A7E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4821321B0FF8BC97349FF322 /* Babymon */,
+				5EF4720841D50CDB0FDA599B /* BabymonWatch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F21E1B1FB1DCE7887EC73787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A8E414583C3432468907379 /* AudioPlayerManager.swift in Sources */,
+				73A659E1752B43674BDF08B7 /* BabymonApp.swift in Sources */,
+				80DAB2C99743C4CB8AAC1CFA /* CameraCaptureManager.swift in Sources */,
+				7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */,
+				FABC577BD671923169396A7B /* ContentView.swift in Sources */,
+				55323562D1488D2D73AFB01A /* ModeSelectionView.swift in Sources */,
+				B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */,
+				2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */,
+				4AD2B9B3AD73299D54FDB1D2 /* SessionMode.swift in Sources */,
+				BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F898A55715413EF1DDDE973A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */,
+				E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */,
+				9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */,
+				2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */,
+				8B641B88B70BE031269DA166 /* WatchAudioCaptureManager.swift in Sources */,
+				124C189401CC1C7D977343FE /* WatchAudioPlayerManager.swift in Sources */,
+				22AF56839DF871D9A1F82E5A /* WatchAudioSourceView.swift in Sources */,
+				FCE25C38D28EA15E5946E2C5 /* WatchContentView.swift in Sources */,
+				E38CDAD4A0CBF3611343D4B5 /* WatchModeSelectionView.swift in Sources */,
+				6975F0864DCAE5DA2CB120BC /* WatchVideoReceiverView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D160E50FCCD6C669939C6B17 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EF4720841D50CDB0FDA599B /* BabymonWatch */;
+			targetProxy = 8FBF1BEDFD129562EAB1C8FB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		343041E2C8684D5F7D408BCB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		43B612D9DFE02DB90E18AC41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Babymon/Babymon.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Babymon needs camera access to stream video to your Apple Watch";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Babymon needs microphone access to stream audio to your Apple Watch";
+				INFOPLIST_KEY_UIBackgroundModes = audio;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babymon.Babymon;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6D8BBF7292D333F3B0BB7487 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		93E6DCBF72402ACFA2078FE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BabymonWatch/BabymonWatch.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Babymon needs microphone access to stream audio to your iPhone";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.babymon.Babymon;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babymon.BabymonWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		B7BE0A77F41E29B90E0B93C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BabymonWatch/BabymonWatch.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Babymon needs microphone access to stream audio to your iPhone";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.babymon.Babymon;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babymon.BabymonWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		FF3842798CBA1C1A4E63A960 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Babymon/Babymon.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Babymon needs camera access to stream video to your Apple Watch";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Babymon needs microphone access to stream audio to your Apple Watch";
+				INFOPLIST_KEY_UIBackgroundModes = audio;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babymon.Babymon;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		597994A89EA6D26A74C8805D /* Build configuration list for PBXNativeTarget "Babymon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3842798CBA1C1A4E63A960 /* Debug */,
+				43B612D9DFE02DB90E18AC41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		62FECED9AAB40CAF86B6C51F /* Build configuration list for PBXNativeTarget "BabymonWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93E6DCBF72402ACFA2078FE0 /* Debug */,
+				B7BE0A77F41E29B90E0B93C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DEC2B17178254006A159AE18 /* Build configuration list for PBXProject "Babymon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				343041E2C8684D5F7D408BCB /* Debug */,
+				6D8BBF7292D333F3B0BB7487 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 716076477C6368563B263F65 /* Project object */;
+}
