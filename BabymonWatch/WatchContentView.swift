@@ -14,5 +14,6 @@ struct WatchContentView: View {
                 WatchAudioSourceView()
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: connectivity.currentMode == nil)
     }
 }

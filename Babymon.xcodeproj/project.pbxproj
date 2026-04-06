@@ -11,6 +11,7 @@
 		22AF56839DF871D9A1F82E5A /* WatchAudioSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE400E998E1B54C9C3597DEC /* WatchAudioSourceView.swift */; };
 		2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */; };
 		2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
+		3B7713809194FB558B8D8871 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F3748EB8367166DBB81869 /* Theme.swift */; };
 		4AD2B9B3AD73299D54FDB1D2 /* SessionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */; };
 		55323562D1488D2D73AFB01A /* ModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */; };
 		6975F0864DCAE5DA2CB120BC /* WatchVideoReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */; };
@@ -18,14 +19,17 @@
 		73A659E1752B43674BDF08B7 /* BabymonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */; };
 		7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
 		80DAB2C99743C4CB8AAC1CFA /* CameraCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3169286872AF40174CED573 /* CameraCaptureManager.swift */; };
+		80FFAD337F6F7B5B5186AA86 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F3748EB8367166DBB81869 /* Theme.swift */; };
 		8B641B88B70BE031269DA166 /* WatchAudioCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */; };
 		9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */; };
 		B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */; };
 		BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
 		D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */; };
+		DF78002B6550C22F6B246252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EF483BA363B1D6F1358CFB /* Assets.xcassets */; };
 		E18C28A2C84FD709A85625BF /* BabymonWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7000131F425B22BDFFA5675B /* BabymonWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E38CDAD4A0CBF3611343D4B5 /* WatchModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */; };
 		E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
+		F7AFBE8B51F0A485ACF731F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5506FDF805A37D0CA9ED3E90 /* Assets.xcassets */; };
 		FABC577BD671923169396A7B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE53017850CFAEA6ED0678A /* ContentView.swift */; };
 		FCE25C38D28EA15E5946E2C5 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */; };
 /* End PBXBuildFile section */
@@ -61,8 +65,11 @@
 		4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelectionView.swift; sourceTree = "<group>"; };
 		43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		498293C8734027D5FA7004BB /* BabymonWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabymonWatch.entitlements; sourceTree = "<group>"; };
+		5506FDF805A37D0CA9ED3E90 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		55EF483BA363B1D6F1358CFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7000131F425B22BDFFA5675B /* BabymonWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabymonWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabymonApp.swift; sourceTree = "<group>"; };
+		72F3748EB8367166DBB81869 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionMode.swift; sourceTree = "<group>"; };
 		8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioCaptureManager.swift; sourceTree = "<group>"; };
 		84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAudioReceiverView.swift; sourceTree = "<group>"; };
@@ -82,6 +89,7 @@
 		106420ACECDD4CA7EE8A548F /* BabymonWatch */ = {
 			isa = PBXGroup;
 			children = (
+				5506FDF805A37D0CA9ED3E90 /* Assets.xcassets */,
 				498293C8734027D5FA7004BB /* BabymonWatch.entitlements */,
 				8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */,
 				F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */,
@@ -126,6 +134,7 @@
 				A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */,
 				7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */,
 				09D9A42CC239946176FFD25B /* StreamingProtocol.swift */,
+				72F3748EB8367166DBB81869 /* Theme.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -152,6 +161,7 @@
 		AB8A8BA802794A2D69A95910 /* Babymon */ = {
 			isa = PBXGroup;
 			children = (
+				55EF483BA363B1D6F1358CFB /* Assets.xcassets */,
 				1507C3223FDA1F4A2EABBD52 /* Babymon.entitlements */,
 				7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */,
 				8CE53017850CFAEA6ED0678A /* ContentView.swift */,
@@ -178,6 +188,7 @@
 			buildConfigurationList = 597994A89EA6D26A74C8805D /* Build configuration list for PBXNativeTarget "Babymon" */;
 			buildPhases = (
 				F21E1B1FB1DCE7887EC73787 /* Sources */,
+				86708C2E4CECC36C129CC8D9 /* Resources */,
 				5FE7C9E41A2B2C465BD54165 /* Embed Watch Content */,
 			);
 			buildRules = (
@@ -197,6 +208,7 @@
 			buildConfigurationList = 62FECED9AAB40CAF86B6C51F /* Build configuration list for PBXNativeTarget "BabymonWatch" */;
 			buildPhases = (
 				F898A55715413EF1DDDE973A /* Sources */,
+				4AFEA71D9808F14F10CB0617 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -240,6 +252,25 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		4AFEA71D9808F14F10CB0617 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7AFBE8B51F0A485ACF731F6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86708C2E4CECC36C129CC8D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF78002B6550C22F6B246252 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F21E1B1FB1DCE7887EC73787 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -255,6 +286,7 @@
 				2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */,
 				4AD2B9B3AD73299D54FDB1D2 /* SessionMode.swift in Sources */,
 				BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */,
+				80FFAD337F6F7B5B5186AA86 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +298,7 @@
 				E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */,
 				9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */,
 				2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */,
+				3B7713809194FB558B8D8871 /* Theme.swift in Sources */,
 				8B641B88B70BE031269DA166 /* WatchAudioCaptureManager.swift in Sources */,
 				124C189401CC1C7D977343FE /* WatchAudioPlayerManager.swift in Sources */,
 				22AF56839DF871D9A1F82E5A /* WatchAudioSourceView.swift in Sources */,

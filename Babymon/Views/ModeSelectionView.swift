@@ -2,52 +2,151 @@ import SwiftUI
 
 struct ModeSelectionView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
+    @State private var appeared = false
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
+        VStack(spacing: 0) {
+            Spacer()
 
-                connectionStatus
+            // App icon + title
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(BabymonTheme.accent.opacity(0.1))
+                        .frame(width: 100, height: 100)
+                    Circle()
+                        .fill(BabymonTheme.accent.opacity(0.06))
+                        .frame(width: 130, height: 130)
+                    Image(systemName: "moon.stars.fill")
+                        .font(.system(size: 42))
+                        .foregroundStyle(BabymonTheme.accentGradient)
+                }
+                .scaleEffect(appeared ? 1 : 0.6)
+                .opacity(appeared ? 1 : 0)
 
-                Button {
+                Text("Babymon")
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+
+                Text("Keep an eye on your little one")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+            .padding(.bottom, 48)
+
+            // Status
+            StatusPill(isConnected: connectivity.isReachable)
+                .padding(.bottom, 32)
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 10)
+
+            // Mode cards
+            VStack(spacing: 16) {
+                ModeCard(
+                    icon: "video.fill",
+                    title: "Video Monitor",
+                    subtitle: "Stream iPhone camera & audio to your Watch",
+                    gradient: BabymonTheme.accentGradient,
+                    iconColor: BabymonTheme.accentLight,
+                    disabled: !connectivity.isReachable
+                ) {
                     connectivity.currentMode = .phoneSource
                     connectivity.sendModeSelection(.phoneSource)
-                } label: {
-                    Label("Use iPhone Camera", systemImage: "video.fill")
-                        .frame(maxWidth: .infinity)
-                        .padding()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue)
-                .disabled(!connectivity.isReachable)
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 30)
 
-                Button {
+                ModeCard(
+                    icon: "waveform",
+                    title: "Audio Monitor",
+                    subtitle: "Listen to your Watch microphone on iPhone",
+                    gradient: BabymonTheme.greenGradient,
+                    iconColor: BabymonTheme.softGreen,
+                    disabled: !connectivity.isReachable
+                ) {
                     connectivity.currentMode = .watchSource
                     connectivity.sendModeSelection(.watchSource)
-                } label: {
-                    Label("Listen to Watch Mic", systemImage: "ear.fill")
-                        .frame(maxWidth: .infinity)
-                        .padding()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
-                .disabled(!connectivity.isReachable)
-
-                Spacer()
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 40)
             }
-            .padding()
-            .navigationTitle("Babymon")
+            .padding(.horizontal, 20)
+
+            Spacer()
+
+            if !connectivity.isReachable {
+                Text("Open Babymon on your Apple Watch to connect")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.35))
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 24)
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(duration: 0.8, bounce: 0.3)) {
+                appeared = true
+            }
         }
     }
+}
 
-    private var connectionStatus: some View {
-        HStack {
-            Circle()
-                .fill(connectivity.isReachable ? .green : .red)
-                .frame(width: 12, height: 12)
-            Text(connectivity.isReachable ? "Watch Connected" : "Watch Not Connected")
-                .foregroundStyle(.secondary)
+struct ModeCard: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+    let gradient: LinearGradient
+    let iconColor: Color
+    let disabled: Bool
+    let action: () -> Void
+
+    @State private var isPressed = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                // Icon
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(iconColor.opacity(0.15))
+                        .frame(width: 52, height: 52)
+                    Image(systemName: icon)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(iconColor)
+                }
+
+                // Text
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white)
+                    Text(subtitle)
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .lineLimit(2)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.3))
+            }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(BabymonTheme.cardBg)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(.white.opacity(0.06), lineWidth: 1)
+                    )
+            )
+            .scaleEffect(isPressed ? 0.97 : 1)
         }
+        .buttonStyle(.plain)
+        .opacity(disabled ? 0.4 : 1)
+        .disabled(disabled)
+        .onLongPressGesture(minimumDuration: .infinity, pressing: { pressing in
+            withAnimation(.easeInOut(duration: 0.15)) { isPressed = pressing }
+        }, perform: {})
     }
 }
