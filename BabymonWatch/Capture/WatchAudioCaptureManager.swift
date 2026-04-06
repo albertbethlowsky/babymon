@@ -3,6 +3,8 @@ import AVFoundation
 class WatchAudioCaptureManager: ObservableObject {
     var onAudioReady: ((Data) -> Void)?
 
+    let soundAnalyzer = SoundLevelAnalyzer()
+
     private var engine: AVAudioEngine?
     private let targetFormat = makeAudioFormat()
 
@@ -49,6 +51,10 @@ class WatchAudioCaptureManager: ObservableObject {
         guard let channelData = buffer.int16ChannelData else { return }
         let byteCount = Int(buffer.frameLength) * MemoryLayout<Int16>.size
         let data = Data(bytes: channelData[0], count: byteCount)
+
+        // Analyze sound level for cry detection
+        soundAnalyzer.analyze(int16Data: data)
+
         onAudioReady?(prefixData(.audio, data))
     }
 

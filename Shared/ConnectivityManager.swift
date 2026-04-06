@@ -12,6 +12,7 @@ class ConnectivityManager: NSObject, ObservableObject {
     var onAudioDataReceived: ((Data) -> Void)?
     var onVideoDataReceived: ((Data) -> Void)?
     var onModeReceived: ((SessionMode) -> Void)?
+    var onCryAlertReceived: (() -> Void)?
 
     private override init() {
         super.init()
@@ -44,6 +45,10 @@ class ConnectivityManager: NSObject, ObservableObject {
         WCSession.default.sendMessageData(data, replyHandler: nil) { error in
             print("Send error: \(error.localizedDescription)")
         }
+    }
+
+    func sendCryAlert() {
+        sendStreamData(prefixData(.cryAlert, Data()))
     }
 
     func sendModeSelection(_ mode: SessionMode) {
@@ -86,6 +91,8 @@ extension ConnectivityManager: WCSessionDelegate {
             onVideoDataReceived?(payload)
         case .audio:
             onAudioDataReceived?(payload)
+        case .cryAlert:
+            onCryAlertReceived?()
         case .control:
             break
         }

@@ -9,6 +9,7 @@ enum MessageType: UInt8 {
     case video = 0x01
     case audio = 0x02
     case control = 0x03
+    case cryAlert = 0x04
 }
 
 func prefixData(_ type: MessageType, _ payload: Data) -> Data {

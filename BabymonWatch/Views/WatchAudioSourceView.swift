@@ -4,7 +4,6 @@ import WatchKit
 struct WatchAudioSourceView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
     @StateObject private var captureManager = WatchAudioCaptureManager()
-    @State private var isActive = false
     @State private var extendedSession: WKExtendedRuntimeSession?
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
@@ -12,38 +11,58 @@ struct WatchAudioSourceView: View {
     @State private var ringOpacity: Double = 0.5
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Spacer()
 
-            // Animated mic indicator
+            // Animated mic indicator with sound level ring
             ZStack {
                 // Pulsing ring
                 Circle()
-                    .stroke(BabymonTheme.softGreen.opacity(0.3), lineWidth: 1.5)
+                    .stroke(ringColor.opacity(0.3), lineWidth: 1.5)
                     .frame(width: 50, height: 50)
                     .scaleEffect(ringScale)
                     .opacity(ringOpacity)
 
+                // Sound level ring
+                Circle()
+                    .trim(from: 0, to: CGFloat(captureManager.soundAnalyzer.currentLevel))
+                    .stroke(ringColor, lineWidth: 3)
+                    .frame(width: 48, height: 48)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeOut(duration: 0.1), value: captureManager.soundAnalyzer.currentLevel)
+
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(BabymonTheme.softGreen.opacity(0.15))
-                        .frame(width: 44, height: 44)
-                    Image(systemName: "mic.fill")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(BabymonTheme.softGreen)
+                        .fill(ringColor.opacity(0.15))
+                        .frame(width: 38, height: 38)
+                    Image(systemName: captureManager.soundAnalyzer.isCryDetected ? "exclamationmark.triangle.fill" : "mic.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(ringColor)
                 }
             }
 
             // Status
-            VStack(spacing: 3) {
-                Text("Sending Audio")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white)
+            VStack(spacing: 2) {
+                if captureManager.soundAnalyzer.isCryDetected {
+                    Text("Sound Detected!")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(BabymonTheme.warmPink)
+                } else {
+                    Text("Monitoring")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white)
+                }
 
                 Text(formattedTime)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.4))
+
+                // Level bar
+                SoundLevelBar(level: captureManager.soundAnalyzer.currentLevel)
+                    .frame(height: 4)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 4)
             }
 
             Spacer()
@@ -75,8 +94,11 @@ struct WatchAudioSourceView: View {
             captureManager.onAudioReady = { data in
                 connectivity.sendStreamData(data)
             }
+            captureManager.soundAnalyzer.onCryDetected = {
+                connectivity.sendCryAlert()
+                WKInterfaceDevice.current().play(.notification)
+            }
             captureManager.startCapture()
-            isActive = true
             startTimer()
 
             withAnimation(.easeOut(duration: 1.5).repeatForever(autoreverses: false)) {
@@ -87,6 +109,10 @@ struct WatchAudioSourceView: View {
         .onDisappear {
             stop()
         }
+    }
+
+    private var ringColor: Color {
+        captureManager.soundAnalyzer.isCryDetected ? BabymonTheme.warmPink : BabymonTheme.softGreen
     }
 
     private var formattedTime: String {
@@ -108,12 +134,35 @@ struct WatchAudioSourceView: View {
         extendedSession?.invalidate()
         extendedSession = nil
         connectivity.currentMode = nil
-        isActive = false
     }
 
     private func startExtendedSession() {
         let session = WKExtendedRuntimeSession()
         session.start()
         extendedSession = session
+    }
+}
+
+struct SoundLevelBar: View {
+    let level: Float
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(.white.opacity(0.1))
+
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(barColor)
+                    .frame(width: geo.size.width * CGFloat(level))
+                    .animation(.easeOut(duration: 0.1), value: level)
+            }
+        }
+    }
+
+    private var barColor: Color {
+        if level > 0.7 { return BabymonTheme.warmPink }
+        if level > 0.4 { return BabymonTheme.warmOrange }
+        return BabymonTheme.softGreen
     }
 }
