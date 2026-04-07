@@ -25,6 +25,18 @@ targets:
     entitlements:
       path: Babymon/Babymon.entitlements
       properties: {}
+  BabymonTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: BabymonTests
+    dependencies:
+      - target: Babymon
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+
   BabymonWatch:
     type: application
     platform: watchOS
