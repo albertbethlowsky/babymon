@@ -6,11 +6,15 @@ class CameraCaptureManager: NSObject, ObservableObject {
     var onFrameReady: ((Data) -> Void)?
     var onAudioReady: ((Data) -> Void)?
 
+    @Published var isNightMode = false
+    @Published var isTorchOn = false
+
     private let videoQueue = DispatchQueue(label: "com.babymon.video")
     private let audioQueue = DispatchQueue(label: "com.babymon.audio")
     private var lastFrameTime: CFAbsoluteTime = 0
     private let ciContext = CIContext()
     private let frameInterval: CFAbsoluteTime
+    private var videoDevice: AVCaptureDevice?
 
     override init() {
         frameInterval = 1.0 / Double(videoFPS)
@@ -22,10 +26,11 @@ class CameraCaptureManager: NSObject, ObservableObject {
         session.sessionPreset = .medium
 
         // Video input
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
-              let videoInput = try? AVCaptureDeviceInput(device: videoDevice),
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+              let videoInput = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(videoInput) else { return }
         session.addInput(videoInput)
+        videoDevice = device
 
         // Audio input
         guard let audioDevice = AVCaptureDevice.default(for: .audio),
@@ -55,8 +60,95 @@ class CameraCaptureManager: NSObject, ObservableObject {
     }
 
     func stopCapture() {
+        if isTorchOn { setTorch(on: false) }
         session.stopRunning()
     }
+
+    // MARK: - Night Mode
+
+    func toggleNightMode() {
+        isNightMode.toggle()
+        if isNightMode {
+            enableNightMode()
+        } else {
+            disableNightMode()
+        }
+    }
+
+    private func enableNightMode() {
+        guard let device = videoDevice else { return }
+        do {
+            try device.lockForConfiguration()
+
+            // Max out exposure for low-light
+            if device.isExposureModeSupported(.continuousAutoExposure) {
+                device.exposureMode = .continuousAutoExposure
+            }
+            device.setExposureTargetBias(device.maxExposureTargetBias * 0.7, completionHandler: nil)
+
+            // Slower frame rate allows longer exposure per frame
+            device.activeVideoMinFrameDuration = CMTime(value: 1, timescale: 4) // 4fps min
+            device.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: 4)
+
+            // Max ISO
+            let maxISO = device.activeFormat.maxISO
+            if device.isExposureModeSupported(.custom) {
+                device.setExposureModeCustom(
+                    duration: AVCaptureDevice.currentExposureDuration,
+                    iso: min(maxISO, 1600),
+                    completionHandler: nil
+                )
+            }
+
+            device.unlockForConfiguration()
+
+            // Turn on torch at low level for infrared-like illumination
+            setTorch(on: true, level: 0.1)
+        } catch {
+            print("Night mode config error: \(error)")
+        }
+    }
+
+    private func disableNightMode() {
+        guard let device = videoDevice else { return }
+        do {
+            try device.lockForConfiguration()
+
+            // Reset to auto exposure
+            if device.isExposureModeSupported(.continuousAutoExposure) {
+                device.exposureMode = .continuousAutoExposure
+            }
+            device.setExposureTargetBias(0, completionHandler: nil)
+
+            // Reset frame rate
+            device.activeVideoMinFrameDuration = .invalid
+            device.activeVideoMaxFrameDuration = .invalid
+
+            device.unlockForConfiguration()
+
+            setTorch(on: false)
+        } catch {
+            print("Reset camera config error: \(error)")
+        }
+    }
+
+    func setTorch(on: Bool, level: Float = 0.1) {
+        guard let device = videoDevice, device.hasTorch else { return }
+        do {
+            try device.lockForConfiguration()
+            if on {
+                try device.setTorchModeOn(level: level)
+            } else {
+                device.torchMode = .off
+            }
+            device.unlockForConfiguration()
+            DispatchQueue.main.async { self.isTorchOn = on }
+        } catch {
+            print("Torch error: \(error)")
+        }
+    }
+
+    // MARK: - Frame Processing
 
     private func processVideoFrame(_ sampleBuffer: CMSampleBuffer) {
         let now = CFAbsoluteTimeGetCurrent()
@@ -64,7 +156,12 @@ class CameraCaptureManager: NSObject, ObservableObject {
         lastFrameTime = now
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        var ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+        // In night mode, boost brightness and apply green tint for night-vision look
+        if isNightMode {
+            ciImage = applyNightVisionFilter(to: ciImage)
+        }
 
         let scaleX = CGFloat(videoWidth) / ciImage.extent.width
         let scaleY = CGFloat(videoHeight) / ciImage.extent.height
@@ -75,6 +172,32 @@ class CameraCaptureManager: NSObject, ObservableObject {
         guard let jpegData = uiImage.jpegData(compressionQuality: jpegQuality) else { return }
 
         onFrameReady?(prefixData(.video, jpegData))
+    }
+
+    private func applyNightVisionFilter(to image: CIImage) -> CIImage {
+        var result = image
+
+        // Boost exposure
+        if let exposureFilter = CIFilter(name: "CIExposureAdjust") {
+            exposureFilter.setValue(result, forKey: kCIInputImageKey)
+            exposureFilter.setValue(1.5, forKey: kCIInputEVKey)
+            if let output = exposureFilter.outputImage {
+                result = output
+            }
+        }
+
+        // Green tint via color matrix (classic night-vision)
+        if let colorMatrix = CIFilter(name: "CIColorMatrix") {
+            colorMatrix.setValue(result, forKey: kCIInputImageKey)
+            colorMatrix.setValue(CIVector(x: 0.2, y: 0, z: 0, w: 0), forKey: "inputRVector")
+            colorMatrix.setValue(CIVector(x: 0, y: 0.8, z: 0, w: 0), forKey: "inputGVector")
+            colorMatrix.setValue(CIVector(x: 0, y: 0, z: 0.2, w: 0), forKey: "inputBVector")
+            if let output = colorMatrix.outputImage {
+                result = output
+            }
+        }
+
+        return result
     }
 
     private func processAudioBuffer(_ sampleBuffer: CMSampleBuffer) {

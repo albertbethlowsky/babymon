@@ -54,8 +54,60 @@ struct PhoneCameraSourceView: View {
                     Spacer()
 
                     // Bottom controls
-                    StopButton {
-                        stop()
+                    HStack(spacing: 16) {
+                        // Night mode toggle
+                        Button {
+                            captureManager.toggleNightMode()
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: captureManager.isNightMode ? "moon.fill" : "moon")
+                                    .font(.system(size: 20, weight: .medium))
+                                Text("Night")
+                                    .font(.system(size: 10, weight: .medium))
+                            }
+                            .foregroundStyle(captureManager.isNightMode ? BabymonTheme.softGreen : .white.opacity(0.7))
+                            .frame(width: 56, height: 56)
+                            .background(
+                                Circle()
+                                    .fill(captureManager.isNightMode ? BabymonTheme.softGreen.opacity(0.2) : .black.opacity(0.4))
+                            )
+                        }
+
+                        // Stop
+                        Button {
+                            stop()
+                        } label: {
+                            Image(systemName: "stop.fill")
+                                .font(.system(size: 22))
+                                .foregroundStyle(.white)
+                                .frame(width: 64, height: 64)
+                                .background(
+                                    Circle()
+                                        .fill(BabymonTheme.warmPink)
+                                )
+                        }
+
+                        // Torch toggle
+                        Button {
+                            if captureManager.isTorchOn {
+                                captureManager.setTorch(on: false)
+                            } else {
+                                captureManager.setTorch(on: true, level: 0.3)
+                            }
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: captureManager.isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                                    .font(.system(size: 20, weight: .medium))
+                                Text("Light")
+                                    .font(.system(size: 10, weight: .medium))
+                            }
+                            .foregroundStyle(captureManager.isTorchOn ? BabymonTheme.warmOrange : .white.opacity(0.7))
+                            .frame(width: 56, height: 56)
+                            .background(
+                                Circle()
+                                    .fill(captureManager.isTorchOn ? BabymonTheme.warmOrange.opacity(0.2) : .black.opacity(0.4))
+                            )
+                        }
                     }
                     .padding(.bottom, 40)
                 }
