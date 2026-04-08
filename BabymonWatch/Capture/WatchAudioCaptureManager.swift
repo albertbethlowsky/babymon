@@ -8,12 +8,25 @@ class WatchAudioCaptureManager: ObservableObject {
 
     private var engine: AVAudioEngine?
     private let targetFormat = makeAudioFormat()
+    private var interruptionObserver: NSObjectProtocol?
 
     func startCapture() {
-        let audioSession = AVAudioSession.sharedInstance()
-        try? audioSession.setCategory(.record, mode: .default)
-        try? audioSession.setActive(true)
+        configureAudioSession()
+        observeInterruptions()
+        startEngine()
+    }
 
+    private func configureAudioSession() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .default)
+            try audioSession.setActive(true)
+        } catch {
+            print("Watch audio session error: \(error)")
+        }
+    }
+
+    private func startEngine() {
         let engine = AVAudioEngine()
         let inputNode = engine.inputNode
         let inputFormat = inputNode.outputFormat(forBus: 0)
@@ -34,7 +47,7 @@ class WatchAudioCaptureManager: ObservableObject {
             inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { [weak self] buffer, time in
                 guard let self else { return }
 
-                // Feed native format to classifier (it needs the original format)
+                // Feed native format to classifier
                 cryClassifier.analyze(buffer: buffer, at: time.sampleTime)
 
                 // Convert for streaming
@@ -53,8 +66,12 @@ class WatchAudioCaptureManager: ObservableObject {
             }
         }
 
-        try? engine.start()
-        self.engine = engine
+        do {
+            try engine.start()
+            self.engine = engine
+        } catch {
+            print("Watch audio engine start error: \(error)")
+        }
     }
 
     private func sendBuffer(_ buffer: AVAudioPCMBuffer) {
@@ -73,5 +90,49 @@ class WatchAudioCaptureManager: ObservableObject {
         engine?.stop()
         cryClassifier.stop()
         engine = nil
+
+        if let observer = interruptionObserver {
+            NotificationCenter.default.removeObserver(observer)
+            interruptionObserver = nil
+        }
+    }
+
+    // MARK: - Interruption Handling
+
+    private func observeInterruptions() {
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: nil
+        ) { [weak self] notification in
+            guard let self,
+                  let info = notification.userInfo,
+                  let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
+            switch type {
+            case .began:
+                // Audio interrupted — engine paused
+                break
+            case .ended:
+                guard let optionsValue = info[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                if options.contains(.shouldResume) {
+                    self.restartAfterInterruption()
+                }
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    private func restartAfterInterruption() {
+        // Tear down and rebuild to get a clean engine state
+        engine?.inputNode.removeTap(onBus: 0)
+        engine?.stop()
+        engine = nil
+
+        configureAudioSession()
+        startEngine()
     }
 }

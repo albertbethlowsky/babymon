@@ -15,6 +15,7 @@ class CameraCaptureManager: NSObject, ObservableObject {
     private let ciContext = CIContext()
     private let frameInterval: CFAbsoluteTime
     private var videoDevice: AVCaptureDevice?
+    private var interruptionObserver: NSObjectProtocol?
 
     override init() {
         frameInterval = 1.0 / Double(videoFPS)
@@ -22,6 +23,9 @@ class CameraCaptureManager: NSObject, ObservableObject {
     }
 
     func startCapture() {
+        configureAudioSession()
+        observeInterruptions()
+
         session.beginConfiguration()
         session.sessionPreset = .medium
 
@@ -62,6 +66,61 @@ class CameraCaptureManager: NSObject, ObservableObject {
     func stopCapture() {
         if isTorchOn { setTorch(on: false) }
         session.stopRunning()
+        if let observer = interruptionObserver {
+            NotificationCenter.default.removeObserver(observer)
+            interruptionObserver = nil
+        }
+    }
+
+    // MARK: - Audio Session for Background
+
+    private func configureAudioSession() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            // .playAndRecord allows both mic capture and speaker output
+            // .defaultToSpeaker routes to speaker (not earpiece)
+            // .allowBluetooth allows BT headphones
+            try audioSession.setCategory(
+                .playAndRecord,
+                mode: .videoRecording,
+                options: [.defaultToSpeaker, .allowBluetooth]
+            )
+            try audioSession.setActive(true, options: [.notifyOthersOnDeactivation])
+        } catch {
+            print("CameraCapture audio session error: \(error)")
+        }
+    }
+
+    private func observeInterruptions() {
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: nil
+        ) { [weak self] notification in
+            guard let self,
+                  let info = notification.userInfo,
+                  let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
+            switch type {
+            case .began:
+                // Capture session handles this automatically
+                break
+            case .ended:
+                guard let optionsValue = info[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                if options.contains(.shouldResume) {
+                    configureAudioSession()
+                    if !session.isRunning {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.session.startRunning()
+                        }
+                    }
+                }
+            @unknown default:
+                break
+            }
+        }
     }
 
     // MARK: - Night Mode
