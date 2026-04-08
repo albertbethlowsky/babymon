@@ -10,6 +10,10 @@ struct WatchAudioSourceView: View {
     @State private var ringScale: CGFloat = 1.0
     @State private var ringOpacity: Double = 0.5
 
+    private var isAlert: Bool {
+        captureManager.cryClassifier.isCrying || captureManager.soundAnalyzer.isCryDetected
+    }
+
     var body: some View {
         VStack(spacing: 6) {
             Spacer()
@@ -36,7 +40,7 @@ struct WatchAudioSourceView: View {
                     Circle()
                         .fill(ringColor.opacity(0.15))
                         .frame(width: 38, height: 38)
-                    Image(systemName: captureManager.soundAnalyzer.isCryDetected ? "exclamationmark.triangle.fill" : "mic.fill")
+                    Image(systemName: isAlert ? "exclamationmark.triangle.fill" : "mic.fill")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(ringColor)
                 }
@@ -44,12 +48,16 @@ struct WatchAudioSourceView: View {
 
             // Status
             VStack(spacing: 2) {
-                if captureManager.soundAnalyzer.isCryDetected {
+                if captureManager.cryClassifier.isCrying {
+                    Text("Baby Crying!")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(BabymonTheme.warmPink)
+                } else if captureManager.soundAnalyzer.isCryDetected {
                     Text("Sound Detected!")
                         .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundStyle(BabymonTheme.warmPink)
                 } else {
-                    Text("Monitoring")
+                    Text(captureManager.cryClassifier.dominantSound)
                         .font(.system(size: 13, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
                 }
@@ -94,9 +102,17 @@ struct WatchAudioSourceView: View {
             captureManager.onAudioReady = { data in
                 connectivity.sendStreamData(data)
             }
-            captureManager.soundAnalyzer.onCryDetected = {
+            // Prefer classifier for cry alerts, fall back to RMS
+            captureManager.cryClassifier.onCryDetected = {
                 connectivity.sendCryAlert()
                 WKInterfaceDevice.current().play(.notification)
+            }
+            captureManager.soundAnalyzer.onCryDetected = {
+                // Only use RMS fallback if classifier hasn't already fired
+                if !captureManager.cryClassifier.isCrying {
+                    connectivity.sendCryAlert()
+                    WKInterfaceDevice.current().play(.notification)
+                }
             }
             captureManager.startCapture()
             startTimer()
@@ -112,7 +128,7 @@ struct WatchAudioSourceView: View {
     }
 
     private var ringColor: Color {
-        captureManager.soundAnalyzer.isCryDetected ? BabymonTheme.warmPink : BabymonTheme.softGreen
+        isAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen
     }
 
     private var formattedTime: String {

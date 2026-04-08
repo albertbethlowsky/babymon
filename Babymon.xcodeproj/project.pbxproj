@@ -30,6 +30,8 @@
 		AA99F8E7D4D00A27E522804C /* SoundLevelAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021E745A181A584EADA75455 /* SoundLevelAnalyzerTests.swift */; };
 		B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */; };
 		BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
+		BFCFABC509D847F3B773CF12 /* CryClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20946299DED9CC21D4CC6507 /* CryClassifier.swift */; };
+		C982954A1A18F21E1181F7FA /* CryClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20946299DED9CC21D4CC6507 /* CryClassifier.swift */; };
 		D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */; };
 		D2C1B0E22A49183E86065038 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2096046B936E272C07B621 /* NotificationManager.swift */; };
 		D405630BD13654402311DFC8 /* ConnectivityManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD696E3952F16B3CCA7EE72A /* ConnectivityManagerTests.swift */; };
@@ -56,6 +58,7 @@
 		09D9A42CC239946176FFD25B /* StreamingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingProtocol.swift; sourceTree = "<group>"; };
 		1507C3223FDA1F4A2EABBD52 /* Babymon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Babymon.entitlements; sourceTree = "<group>"; };
 		1C93596DD9D7937B1D3A9A5F /* SoundLevelAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLevelAnalyzer.swift; sourceTree = "<group>"; };
+		20946299DED9CC21D4CC6507 /* CryClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryClassifier.swift; sourceTree = "<group>"; };
 		3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchModeSelectionView.swift; sourceTree = "<group>"; };
 		4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelectionView.swift; sourceTree = "<group>"; };
 		43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */,
+				20946299DED9CC21D4CC6507 /* CryClassifier.swift */,
 				6A2096046B936E272C07B621 /* NotificationManager.swift */,
 				7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */,
 				1C93596DD9D7937B1D3A9A5F /* SoundLevelAnalyzer.swift */,
@@ -324,6 +328,7 @@
 				80DAB2C99743C4CB8AAC1CFA /* CameraCaptureManager.swift in Sources */,
 				7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */,
 				FABC577BD671923169396A7B /* ContentView.swift in Sources */,
+				C982954A1A18F21E1181F7FA /* CryClassifier.swift in Sources */,
 				55323562D1488D2D73AFB01A /* ModeSelectionView.swift in Sources */,
 				D2C1B0E22A49183E86065038 /* NotificationManager.swift in Sources */,
 				B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */,
@@ -341,6 +346,7 @@
 			files = (
 				D0FA2A7BAE43A0A567ED4EA6 /* BabymonWatchApp.swift in Sources */,
 				E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */,
+				BFCFABC509D847F3B773CF12 /* CryClassifier.swift in Sources */,
 				6F23557F3AD4624A77371D56 /* NotificationManager.swift in Sources */,
 				9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */,
 				561DB270F2154EC1CD88DED8 /* SoundLevelAnalyzer.swift in Sources */,

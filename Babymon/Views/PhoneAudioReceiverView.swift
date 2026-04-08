@@ -5,6 +5,7 @@ struct PhoneAudioReceiverView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
     @StateObject private var audioPlayer = AudioPlayerManager()
     @StateObject private var soundAnalyzer = SoundLevelAnalyzer()
+    @State private var detectedSound: String = "All\nQuiet"
     @State private var appeared = false
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
@@ -57,7 +58,7 @@ struct PhoneAudioReceiverView: View {
                             .foregroundStyle(showCryAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen)
                             .contentTransition(.symbolEffect(.replace))
 
-                        Text(showCryAlert ? "Sound\nDetected" : "All\nQuiet")
+                        Text(showCryAlert ? "Baby\nCrying" : detectedSound)
                             .font(.system(size: 15, weight: .semibold, design: .rounded))
                             .foregroundStyle(.white.opacity(0.8))
                             .multilineTextAlignment(.center)
@@ -273,10 +274,16 @@ struct PhoneAudioReceiverView: View {
 
     private func triggerCryAlert() {
         DispatchQueue.main.async {
-            withAnimation { showCryAlert = true }
+            withAnimation {
+                showCryAlert = true
+                detectedSound = "Baby\nCrying"
+            }
             NotificationManager.shared.sendCryAlert()
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                withAnimation { showCryAlert = false }
+                withAnimation {
+                    showCryAlert = false
+                    detectedSound = "All\nQuiet"
+                }
             }
         }
     }
