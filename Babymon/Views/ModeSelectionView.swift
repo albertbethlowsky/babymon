@@ -5,100 +5,97 @@ struct ModeSelectionView: View {
     @State private var appeared = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                // App icon + title
-                VStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .fill(BabymonTheme.accent.opacity(0.1))
-                            .frame(width: 80, height: 80)
-                        Circle()
-                            .fill(BabymonTheme.accent.opacity(0.06))
-                            .frame(width: 105, height: 105)
-                        Image(systemName: "moon.stars.fill")
-                            .font(.system(size: 34))
-                            .foregroundStyle(BabymonTheme.accentGradient)
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Hero
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(BabymonTheme.accent.opacity(0.08))
+                                .frame(width: 96, height: 96)
+                            Image(systemName: "moon.stars.fill")
+                                .font(.system(size: 36))
+                                .foregroundStyle(BabymonTheme.accentGradient)
+                        }
+                        .scaleEffect(appeared ? 1 : 0.5)
+                        .opacity(appeared ? 1 : 0)
+
+                        Text("Babymon")
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .opacity(appeared ? 1 : 0)
+
+                        Text("Keep an eye on your little one")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.white.opacity(0.45))
+                            .opacity(appeared ? 1 : 0)
                     }
-                    .scaleEffect(appeared ? 1 : 0.6)
-                    .opacity(appeared ? 1 : 0)
-
-                    Text("Babymon")
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-
-                    Text("Keep an eye on your little one")
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.5))
-                }
-                .padding(.top, 20)
-                .padding(.bottom, 16)
-                // Long-press the logo to enable demo mode on a real device
-                .onLongPressGesture(minimumDuration: 2) {
-                    if !connectivity.isDemoMode {
-                        connectivity.enableDemoMode()
-                    }
-                }
-
-                // Status
-                StatusPill(isConnected: connectivity.isReachable)
+                    .padding(.top, max(geo.safeAreaInsets.top + 8, 32))
                     .padding(.bottom, 20)
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 10)
-
-                // Mode cards
-                VStack(spacing: 16) {
-                    ModeCard(
-                        icon: "video.fill",
-                        title: "Video Monitor",
-                        subtitle: "Stream iPhone camera & audio to your Watch",
-                        gradient: BabymonTheme.accentGradient,
-                        iconColor: BabymonTheme.accentLight,
-                        disabled: !connectivity.isReachable
-                    ) {
-                        connectivity.currentMode = .phoneSource
-                        connectivity.sendModeSelection(.phoneSource)
+                    .onLongPressGesture(minimumDuration: 2) {
+                        if !connectivity.isDemoMode {
+                            connectivity.enableDemoMode()
+                        }
                     }
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 30)
 
-                    ModeCard(
-                        icon: "waveform",
-                        title: "Audio Monitor",
-                        subtitle: "Listen to your Watch microphone on iPhone",
-                        gradient: BabymonTheme.greenGradient,
-                        iconColor: BabymonTheme.softGreen,
-                        disabled: !connectivity.isReachable
-                    ) {
-                        connectivity.currentMode = .watchSource
-                        connectivity.sendModeSelection(.watchSource)
+                    // Status
+                    StatusPill(isConnected: connectivity.isReachable)
+                        .padding(.bottom, 24)
+                        .opacity(appeared ? 1 : 0)
+
+                    // Mode cards
+                    VStack(spacing: 14) {
+                        ModeCard(
+                            icon: "video.fill",
+                            title: "Video Monitor",
+                            subtitle: "Stream camera & audio to Watch",
+                            iconColor: BabymonTheme.accentLight,
+                            disabled: !connectivity.isReachable
+                        ) {
+                            withAnimation { connectivity.currentMode = .phoneSource }
+                            connectivity.sendModeSelection(.phoneSource)
+                        }
+
+                        ModeCard(
+                            icon: "waveform",
+                            title: "Audio Monitor",
+                            subtitle: "Listen to Watch microphone",
+                            iconColor: BabymonTheme.softGreen,
+                            disabled: !connectivity.isReachable
+                        ) {
+                            withAnimation { connectivity.currentMode = .watchSource }
+                            connectivity.sendModeSelection(.watchSource)
+                        }
                     }
+                    .padding(.horizontal, 20)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 40)
-                }
-                .padding(.horizontal, 20)
+                    .offset(y: appeared ? 0 : 16)
 
-                // Footer
-                Group {
+                    // Footer
                     if !connectivity.isReachable && !connectivity.isDemoMode {
                         Text("Open Babymon on your Apple Watch to connect")
-                            .font(.footnote)
-                            .foregroundStyle(.white.opacity(0.35))
+                            .font(.caption2)
+                            .foregroundStyle(.white.opacity(0.3))
                             .multilineTextAlignment(.center)
-                    } else if connectivity.isDemoMode {
+                            .padding(.top, 24)
+                    }
+
+                    if connectivity.isDemoMode {
                         Text("Demo Mode")
                             .font(.caption2)
-                            .foregroundStyle(BabymonTheme.warmOrange.opacity(0.6))
+                            .foregroundStyle(BabymonTheme.warmOrange.opacity(0.5))
+                            .padding(.top, 20)
                     }
                 }
-                .padding(.top, 32)
-                .padding(.bottom, 40)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: geo.size.height)
             }
-            .frame(maxWidth: .infinity)
+            .scrollIndicators(.hidden)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollIndicators(.hidden)
         .onAppear {
-            withAnimation(.spring(duration: 0.8, bounce: 0.3)) {
+            withAnimation(.spring(duration: 0.6, bounce: 0.25)) {
                 appeared = true
             }
         }
@@ -109,7 +106,6 @@ struct ModeCard: View {
     let icon: String
     let title: String
     let subtitle: String
-    let gradient: LinearGradient
     let iconColor: Color
     let disabled: Bool
     let action: () -> Void
@@ -118,50 +114,51 @@ struct ModeCard: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 16) {
-                // Icon
+            HStack(spacing: 14) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(iconColor.opacity(0.15))
-                        .frame(width: 52, height: 52)
+                    RoundedRectangle(cornerRadius: 13)
+                        .fill(iconColor.opacity(0.12))
+                        .frame(width: 48, height: 48)
                     Image(systemName: icon)
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(iconColor)
                 }
 
-                // Text
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(title)
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
                     Text(subtitle)
                         .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .lineLimit(2)
+                        .foregroundStyle(.white.opacity(0.45))
+                        .lineLimit(1)
                 }
 
-                Spacer()
+                Spacer(minLength: 4)
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.3))
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.2))
             }
-            .padding(16)
+            .padding(14)
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 18)
                     .fill(BabymonTheme.cardBg)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(.white.opacity(0.06), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(.white.opacity(0.05), lineWidth: 1)
                     )
             )
             .scaleEffect(isPressed ? 0.97 : 1)
+            .animation(.easeOut(duration: 0.12), value: isPressed)
         }
         .buttonStyle(.plain)
-        .opacity(disabled ? 0.4 : 1)
+        .opacity(disabled ? 0.35 : 1)
         .disabled(disabled)
-        .onLongPressGesture(minimumDuration: .infinity, pressing: { pressing in
-            withAnimation(.easeInOut(duration: 0.15)) { isPressed = pressing }
-        }, perform: {})
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in isPressed = true }
+                .onEnded { _ in isPressed = false }
+        )
     }
 }

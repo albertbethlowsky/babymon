@@ -5,157 +5,141 @@ struct PhoneAudioReceiverView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
     @StateObject private var audioPlayer = AudioPlayerManager()
     @StateObject private var soundAnalyzer = SoundLevelAnalyzer()
-    @State private var detectedSound: String = "All\nQuiet"
+    @State private var detectedSound: String = "All Quiet"
     @State private var appeared = false
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
     @State private var showCryAlert = false
     @State private var notificationsGranted = false
-    @State private var showNotificationPrompt = true
 
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
                 // Top bar
                 HStack {
-                    Button {
-                        stop()
-                    } label: {
+                    Button { stop() } label: {
                         Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.6))
-                            .frame(width: 36, height: 36)
-                            .background(Circle().fill(.white.opacity(0.08)))
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .frame(width: 34, height: 34)
+                            .background(Circle().fill(.white.opacity(0.07)))
                     }
 
                     Spacer()
-
                     LiveBadge()
-
                     Spacer()
 
                     Text(formattedTime)
-                        .font(.system(size: 13, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.45))
                         .fixedSize()
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 16)
+                .padding(.top, 12)
+                .opacity(appeared ? 1 : 0)
 
-                // Circular audio visualizer
+                // Circular visualizer
                 ZStack {
-                    // Outer ring — sound level
                     CircularSoundVisualizer(
                         level: soundAnalyzer.currentLevel,
                         isAlert: showCryAlert
                     )
-                    .frame(width: 220, height: 220)
+                    .frame(width: 200, height: 200)
 
-                    // Center content
-                    VStack(spacing: 6) {
+                    VStack(spacing: 4) {
                         Image(systemName: showCryAlert ? "exclamationmark.triangle.fill" : "waveform")
-                            .font(.system(size: 36, weight: .medium))
+                            .font(.system(size: 32, weight: .medium))
                             .foregroundStyle(showCryAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen)
                             .contentTransition(.symbolEffect(.replace))
 
                         Text(showCryAlert ? "Baby\nCrying" : detectedSound)
-                            .font(.system(size: 15, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.8))
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.75))
                             .multilineTextAlignment(.center)
+                            .contentTransition(.numericText())
                     }
                 }
-                .padding(.top, 24)
-                .padding(.bottom, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 12)
                 .opacity(appeared ? 1 : 0)
-                .scaleEffect(appeared ? 1 : 0.8)
+                .scaleEffect(appeared ? 1 : 0.85)
 
-                // Sound level meter
-                VStack(spacing: 8) {
+                // Sound level
+                VStack(spacing: 6) {
                     HStack {
                         Text("Sound Level")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.4))
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.35))
                         Spacer()
                         Text(soundLevelText)
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(soundLevelColor)
+                            .contentTransition(.numericText())
                     }
-
                     SoundMeter(level: soundAnalyzer.currentLevel)
-                        .frame(height: 6)
+                        .frame(height: 5)
                 }
                 .padding(.horizontal, 32)
                 .opacity(appeared ? 1 : 0)
 
-                // Source info card
-                HStack(spacing: 12) {
+                // Source card
+                HStack(spacing: 11) {
                     Image(systemName: "applewatch")
-                        .font(.system(size: 18))
+                        .font(.system(size: 16))
                         .foregroundStyle(BabymonTheme.accent)
-                        .frame(width: 40, height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(BabymonTheme.accent.opacity(0.12))
-                        )
+                        .frame(width: 36, height: 36)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(BabymonTheme.accent.opacity(0.1)))
 
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 1) {
                         Text("Apple Watch Microphone")
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.white)
                         Text("Streaming audio in real-time")
-                            .font(.system(size: 12))
-                            .foregroundStyle(.white.opacity(0.4))
+                            .font(.system(size: 11))
+                            .foregroundStyle(.white.opacity(0.35))
                     }
-
                     Spacer()
-
                     Circle()
                         .fill(BabymonTheme.softGreen)
-                        .frame(width: 8, height: 8)
+                        .frame(width: 7, height: 7)
                 }
-                .padding(14)
+                .padding(12)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 14)
                         .fill(BabymonTheme.cardBg)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(.white.opacity(0.05), lineWidth: 1)
-                        )
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.04), lineWidth: 1))
                 )
                 .padding(.horizontal, 20)
-                .padding(.top, 24)
+                .padding(.top, 20)
                 .opacity(appeared ? 1 : 0)
 
-                // Notification info card
-                if showNotificationPrompt && !notificationsGranted {
+                // Notification info
+                if !notificationsGranted {
                     notificationCard
                         .padding(.horizontal, 20)
-                        .padding(.top, 12)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .padding(.top, 10)
+                        .transition(.opacity.combined(with: .scale(scale: 0.97)))
                 } else {
-                    // Confirmed notification status
-                    HStack(spacing: 8) {
+                    HStack(spacing: 6) {
                         Image(systemName: "bell.badge.fill")
-                            .font(.system(size: 12))
+                            .font(.system(size: 11))
                             .foregroundStyle(BabymonTheme.softGreen)
-                        Text("Notifications enabled — alerts will sound even when locked")
-                            .font(.system(size: 12))
-                            .foregroundStyle(.white.opacity(0.4))
+                        Text("Alerts enabled when phone is locked")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.white.opacity(0.35))
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
+                    .padding(.top, 16)
                 }
 
-                // Stop button
-                StopButton {
-                    stop()
-                }
-                .padding(.top, 32)
-                .padding(.bottom, 40)
-                .opacity(appeared ? 1 : 0)
+                // Stop
+                StopButton { stop() }
+                    .padding(.top, 24)
+                    .padding(.bottom, 32)
+                    .opacity(appeared ? 1 : 0)
             }
         }
         .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .onAppear {
             checkNotificationStatus()
             NotificationManager.shared.requestPermission()
@@ -167,78 +151,56 @@ struct PhoneAudioReceiverView: View {
                     soundAnalyzer.analyze(int16Data: data)
                 }
             } else {
-                // Demo: simulate some sound activity
                 simulateDemoAudio()
             }
 
-            connectivity.onCryAlertReceived = {
-                triggerCryAlert()
-            }
-            soundAnalyzer.onCryDetected = {
-                triggerCryAlert()
-            }
+            connectivity.onCryAlertReceived = { triggerCryAlert() }
+            soundAnalyzer.onCryDetected = { triggerCryAlert() }
 
             startTimer()
-            withAnimation(.spring(duration: 0.7, bounce: 0.3)) {
-                appeared = true
-            }
+            withAnimation(.spring(duration: 0.5, bounce: 0.2)) { appeared = true }
         }
-        .onDisappear {
-            stop()
-        }
+        .onDisappear { stop() }
     }
 
     // MARK: - Notification Card
 
     private var notificationCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 9) {
                 Image(systemName: "bell.badge.fill")
-                    .font(.system(size: 20))
+                    .font(.system(size: 17))
                     .foregroundStyle(BabymonTheme.warmOrange)
-                    .frame(width: 36, height: 36)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(BabymonTheme.warmOrange.opacity(0.12))
-                    )
+                    .frame(width: 32, height: 32)
+                    .background(RoundedRectangle(cornerRadius: 9).fill(BabymonTheme.warmOrange.opacity(0.1)))
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 1) {
                     Text("Enable Notifications")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(.white)
-                    Text("Get alerted when we detect sound, even when your phone is locked.")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .fixedSize(horizontal: false, vertical: true)
+                    Text("Get alerted even when your phone is locked.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(0.45))
                 }
             }
 
             Button {
                 NotificationManager.shared.requestPermission()
-                withAnimation {
-                    notificationsGranted = true
-                    showNotificationPrompt = false
-                }
+                withAnimation(.spring(duration: 0.3)) { notificationsGranted = true }
             } label: {
                 Text("Allow Notifications")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(BabymonTheme.warmOrange)
-                    )
+                    .padding(.vertical, 10)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(BabymonTheme.warmOrange))
             }
         }
-        .padding(14)
+        .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 14)
                 .fill(BabymonTheme.cardBg)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(BabymonTheme.warmOrange.opacity(0.15), lineWidth: 1)
-                )
+                .overlay(RoundedRectangle(cornerRadius: 14).stroke(BabymonTheme.warmOrange.opacity(0.1), lineWidth: 1))
         )
     }
 
@@ -267,32 +229,30 @@ struct PhoneAudioReceiverView: View {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
                 notificationsGranted = settings.authorizationStatus == .authorized
-                showNotificationPrompt = !notificationsGranted
             }
         }
     }
 
     private func triggerCryAlert() {
         DispatchQueue.main.async {
-            withAnimation {
+            withAnimation(.spring(duration: 0.3)) {
                 showCryAlert = true
                 detectedSound = "Baby\nCrying"
             }
             NotificationManager.shared.sendCryAlert()
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                withAnimation {
+                withAnimation(.spring(duration: 0.3)) {
                     showCryAlert = false
-                    detectedSound = "All\nQuiet"
+                    detectedSound = "All Quiet"
                 }
             }
         }
     }
 
     private func simulateDemoAudio() {
-        Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { _ in
-            let fakeLevel = Float.random(in: 0.02...0.25)
+        Timer.scheduledTimer(withTimeInterval: 0.12, repeats: true) { _ in
             DispatchQueue.main.async {
-                soundAnalyzer.currentLevel = fakeLevel
+                soundAnalyzer.currentLevel = Float.random(in: 0.02...0.22)
             }
         }
     }
@@ -305,11 +265,10 @@ struct PhoneAudioReceiverView: View {
 
     private func stop() {
         timer?.invalidate()
-        timer = nil
         audioPlayer.stop()
         connectivity.onAudioDataReceived = nil
         connectivity.onCryAlertReceived = nil
-        connectivity.currentMode = nil
+        withAnimation { connectivity.currentMode = nil }
     }
 }
 
@@ -323,62 +282,50 @@ struct CircularSoundVisualizer: View {
 
     var body: some View {
         ZStack {
-            // Inner glow
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [glowColor.opacity(0.1), .clear],
-                        center: .center,
-                        startRadius: 30,
-                        endRadius: 90
+                        colors: [glowColor.opacity(0.08), .clear],
+                        center: .center, startRadius: 25, endRadius: 85
                     )
                 )
-
-            // Bars drawn via Canvas
             Canvas { context, size in
                 drawBars(context: context, size: size)
             }
         }
-        .animation(.easeOut(duration: 0.1), value: level)
+        .animation(.easeOut(duration: 0.08), value: level)
     }
 
-    private var glowColor: Color {
-        isAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen
-    }
+    private var glowColor: Color { isAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen }
 
     private func drawBars(context: GraphicsContext, size: CGSize) {
         let center = CGPoint(x: size.width / 2, y: size.height / 2)
         let radius = min(size.width, size.height) / 2.0
         let innerR = radius * 0.72
-        let maxExtension = radius - innerR
+        let maxExt = radius - innerR
 
         for i in 0..<barCount {
             let angle = (Double(i) / Double(barCount)) * 2.0 * .pi - .pi / 2.0
-            let barLevel = barHeight(for: i)
-            let outerR = innerR + maxExtension * CGFloat(barLevel)
-
+            let h = barHeight(for: i)
+            let outerR = innerR + maxExt * CGFloat(h)
             let cosA = cos(angle)
             let sinA = sin(angle)
-            let innerPoint = CGPoint(x: center.x + innerR * cosA, y: center.y + innerR * sinA)
-            let outerPoint = CGPoint(x: center.x + outerR * cosA, y: center.y + outerR * sinA)
 
             var path = Path()
-            path.move(to: innerPoint)
-            path.addLine(to: outerPoint)
+            path.move(to: CGPoint(x: center.x + innerR * cosA, y: center.y + innerR * sinA))
+            path.addLine(to: CGPoint(x: center.x + outerR * cosA, y: center.y + outerR * sinA))
 
-            let opacity = 0.3 + Double(barLevel) * 0.7
-            context.stroke(path, with: .color(barColor.opacity(opacity)), lineWidth: 3)
+            let opacity = 0.25 + Double(h) * 0.75
+            context.stroke(path, with: .color(barColor.opacity(opacity)), lineWidth: 2.5)
         }
     }
 
-    private var barColor: Color {
-        isAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen
-    }
+    private var barColor: Color { isAlert ? BabymonTheme.warmPink : BabymonTheme.softGreen }
 
     private func barHeight(for index: Int) -> Float {
-        let variation = Float(sin(Double(index) * 0.8) * 0.3 + 0.7)
-        let noise = Float(sin(Double(index) * 2.3 + Double(level) * 10) * 0.2 + 0.8)
-        return min(max(level * variation * noise * 1.5, 0.05), 1.0)
+        let v = Float(sin(Double(index) * 0.8) * 0.3 + 0.7)
+        let n = Float(sin(Double(index) * 2.3 + Double(level) * 10) * 0.2 + 0.8)
+        return min(max(level * v * n * 1.5, 0.04), 1.0)
     }
 }
 
@@ -390,22 +337,16 @@ struct SoundMeter: View {
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(.white.opacity(0.06))
-
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(barGradient)
+                RoundedRectangle(cornerRadius: 3)
+                    .fill(.white.opacity(0.05))
+                RoundedRectangle(cornerRadius: 3)
+                    .fill(LinearGradient(
+                        colors: [BabymonTheme.softGreen, BabymonTheme.warmOrange, BabymonTheme.warmPink],
+                        startPoint: .leading, endPoint: .trailing
+                    ))
                     .frame(width: max(geo.size.width * CGFloat(level), 2))
-                    .animation(.easeOut(duration: 0.1), value: level)
+                    .animation(.easeOut(duration: 0.08), value: level)
             }
         }
-    }
-
-    private var barGradient: LinearGradient {
-        LinearGradient(
-            colors: [BabymonTheme.softGreen, BabymonTheme.warmOrange, BabymonTheme.warmPink],
-            startPoint: .leading,
-            endPoint: .trailing
-        )
     }
 }

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
-    @State private var appeared = false
 
     var body: some View {
         ZStack {
@@ -13,10 +12,7 @@ struct ContentView: View {
                 switch connectivity.currentMode {
                 case .none:
                     ModeSelectionView()
-                        .transition(.asymmetric(
-                            insertion: .opacity.combined(with: .scale(scale: 0.95)),
-                            removal: .opacity.combined(with: .scale(scale: 1.05))
-                        ))
+                        .transition(.opacity.combined(with: .scale(scale: 0.97)))
                 case .phoneSource:
                     PhoneCameraSourceView()
                         .transition(.move(edge: .trailing).combined(with: .opacity))
@@ -25,7 +21,7 @@ struct ContentView: View {
                         .transition(.move(edge: .trailing).combined(with: .opacity))
                 }
             }
-            .animation(.spring(duration: 0.5, bounce: 0.2), value: connectivity.currentMode == nil)
+            .animation(.spring(duration: 0.35, bounce: 0.15), value: connectivity.currentMode == nil)
         }
         .preferredColorScheme(.dark)
     }

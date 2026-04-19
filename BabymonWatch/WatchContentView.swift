@@ -8,12 +8,15 @@ struct WatchContentView: View {
             switch connectivity.currentMode {
             case .none:
                 WatchModeSelectionView()
+                    .transition(.opacity.combined(with: .scale(scale: 0.97)))
             case .phoneSource:
                 WatchVideoReceiverView()
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
             case .watchSource:
                 WatchAudioSourceView()
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: connectivity.currentMode == nil)
+        .animation(.spring(duration: 0.3, bounce: 0.15), value: connectivity.currentMode == nil)
     }
 }

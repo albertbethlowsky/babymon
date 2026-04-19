@@ -8,13 +8,15 @@ struct PhoneCameraSourceView: View {
     @State private var appeared = false
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
+    @State private var showControls = true
+    @State private var controlsTimer: Timer?
 
     private var isDemo: Bool { connectivity.isDemoMode }
 
     var body: some View {
         ZStack {
             if permissionGranted || isDemo {
-                // Full-screen camera preview (or mock in demo)
+                // Full-screen camera
                 Group {
                     if isDemo {
                         MockCameraView()
@@ -23,108 +25,86 @@ struct PhoneCameraSourceView: View {
                     }
                 }
                 .ignoresSafeArea()
+                .onTapGesture { toggleControls() }
 
-                // Top overlay
-                VStack {
-                    HStack {
-                        LiveBadge()
-                        Spacer()
-                        Text(formattedTime)
-                            .font(.system(size: 13, weight: .medium, design: .monospaced))
+                // Overlays
+                if showControls {
+                    VStack(spacing: 0) {
+                        // Top bar
+                        HStack(alignment: .center) {
+                            LiveBadge()
+                            Spacer()
+                            // Status pill
+                            HStack(spacing: 5) {
+                                Image(systemName: "applewatch")
+                                    .font(.system(size: 11))
+                                Text(isDemo ? "Demo" : "Streaming")
+                                    .font(.system(size: 12, weight: .medium))
+                            }
                             .foregroundStyle(.white.opacity(0.7))
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
-                            .background(Capsule().fill(.black.opacity(0.4)))
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 60)
+                            .background(Capsule().fill(.black.opacity(0.35)))
 
-                    HStack(spacing: 6) {
-                        Image(systemName: "applewatch")
-                            .font(.system(size: 12))
-                        Text(isDemo ? "Demo Mode — Streaming to Watch" : "Streaming to Apple Watch")
-                            .font(.system(size: 13, weight: .medium))
-                    }
-                    .foregroundStyle(.white.opacity(0.8))
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .background(Capsule().fill(.black.opacity(0.4)))
-                    .padding(.top, 8)
+                            Spacer()
 
-                    Spacer()
-
-                    // Bottom controls
-                    HStack(spacing: 16) {
-                        // Night mode toggle
-                        Button {
-                            captureManager.toggleNightMode()
-                        } label: {
-                            VStack(spacing: 4) {
-                                Image(systemName: captureManager.isNightMode ? "moon.fill" : "moon")
-                                    .font(.system(size: 20, weight: .medium))
-                                Text("Night")
-                                    .font(.system(size: 10, weight: .medium))
-                            }
-                            .foregroundStyle(captureManager.isNightMode ? BabymonTheme.softGreen : .white.opacity(0.7))
-                            .frame(width: 56, height: 56)
-                            .background(
-                                Circle()
-                                    .fill(captureManager.isNightMode ? BabymonTheme.softGreen.opacity(0.2) : .black.opacity(0.4))
-                            )
+                            Text(formattedTime)
+                                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 5)
+                                .background(Capsule().fill(.black.opacity(0.35)))
                         }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 56)
 
-                        // Stop
-                        Button {
-                            stop()
-                        } label: {
-                            Image(systemName: "stop.fill")
-                                .font(.system(size: 22))
-                                .foregroundStyle(.white)
-                                .frame(width: 64, height: 64)
-                                .background(
-                                    Circle()
-                                        .fill(BabymonTheme.warmPink)
-                                )
-                        }
+                        Spacer()
 
-                        // Torch toggle
-                        Button {
-                            if captureManager.isTorchOn {
-                                captureManager.setTorch(on: false)
-                            } else {
-                                captureManager.setTorch(on: true, level: 0.3)
+                        // Bottom controls
+                        HStack(spacing: 20) {
+                            CameraControlButton(
+                                icon: captureManager.isNightMode ? "moon.fill" : "moon",
+                                label: "Night",
+                                isActive: captureManager.isNightMode,
+                                activeColor: BabymonTheme.softGreen
+                            ) {
+                                captureManager.toggleNightMode()
                             }
-                        } label: {
-                            VStack(spacing: 4) {
-                                Image(systemName: captureManager.isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill")
-                                    .font(.system(size: 20, weight: .medium))
-                                Text("Light")
-                                    .font(.system(size: 10, weight: .medium))
+
+                            // Stop (larger)
+                            Button { stop() } label: {
+                                Image(systemName: "stop.fill")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.white)
+                                    .frame(width: 60, height: 60)
+                                    .background(Circle().fill(BabymonTheme.warmPink))
                             }
-                            .foregroundStyle(captureManager.isTorchOn ? BabymonTheme.warmOrange : .white.opacity(0.7))
-                            .frame(width: 56, height: 56)
-                            .background(
-                                Circle()
-                                    .fill(captureManager.isTorchOn ? BabymonTheme.warmOrange.opacity(0.2) : .black.opacity(0.4))
-                            )
+
+                            CameraControlButton(
+                                icon: captureManager.isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill",
+                                label: "Light",
+                                isActive: captureManager.isTorchOn,
+                                activeColor: BabymonTheme.warmOrange
+                            ) {
+                                captureManager.setTorch(on: !captureManager.isTorchOn, level: 0.3)
+                            }
                         }
+                        .padding(.bottom, 36)
                     }
-                    .padding(.bottom, 40)
+                    .transition(.opacity)
                 }
-                .opacity(appeared ? 1 : 0)
-
             } else {
-                // Permission denied state
-                VStack(spacing: 20) {
-                    GlowingIcon(systemName: "camera.fill", color: BabymonTheme.warmPink, size: 60)
+                // Permission denied
+                VStack(spacing: 16) {
+                    GlowingIcon(systemName: "camera.fill", color: BabymonTheme.warmPink, size: 56)
 
                     Text("Camera Access Required")
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
 
                     Text("Babymon needs camera and microphone\naccess to monitor your baby.")
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.45))
                         .multilineTextAlignment(.center)
 
                     Button {
@@ -133,40 +113,53 @@ struct PhoneCameraSourceView: View {
                         }
                     } label: {
                         Text("Open Settings")
-                            .fontWeight(.semibold)
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(.white)
-                            .frame(width: 200, height: 50)
+                            .frame(maxWidth: 220, minHeight: 46)
                             .background(Capsule().fill(BabymonTheme.accentGradient))
                     }
-                    .padding(.top, 8)
+                    .padding(.top, 4)
 
                     Button("Go Back") {
-                        connectivity.currentMode = nil
+                        withAnimation { connectivity.currentMode = nil }
                     }
-                    .foregroundStyle(.white.opacity(0.5))
-                    .padding(.top, 4)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.4))
                 }
             }
         }
         .task {
             if isDemo {
-                // Skip permissions in demo mode
                 startTimer()
-                withAnimation(.easeOut(duration: 0.5)) { appeared = true }
+                scheduleControlsHide()
+                withAnimation(.easeOut(duration: 0.4)) { appeared = true }
                 return
             }
             await requestPermissions()
             if permissionGranted {
-                captureManager.onFrameReady = { data in
-                    connectivity.sendStreamData(data)
-                }
-                captureManager.onAudioReady = { data in
-                    connectivity.sendStreamData(data)
-                }
+                captureManager.onFrameReady = { data in connectivity.sendStreamData(data) }
+                captureManager.onAudioReady = { data in connectivity.sendStreamData(data) }
                 captureManager.startCapture()
                 startTimer()
-                withAnimation(.easeOut(duration: 0.5)) { appeared = true }
+                scheduleControlsHide()
+                withAnimation(.easeOut(duration: 0.4)) { appeared = true }
             }
+        }
+    }
+
+    // MARK: - Controls
+
+    private func toggleControls() {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            showControls.toggle()
+        }
+        if showControls { scheduleControlsHide() }
+    }
+
+    private func scheduleControlsHide() {
+        controlsTimer?.invalidate()
+        controlsTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+            withAnimation(.easeOut(duration: 0.3)) { showControls = false }
         }
     }
 
@@ -184,94 +177,100 @@ struct PhoneCameraSourceView: View {
 
     private func stop() {
         timer?.invalidate()
-        timer = nil
+        controlsTimer?.invalidate()
         captureManager.stopCapture()
-        connectivity.currentMode = nil
+        withAnimation { connectivity.currentMode = nil }
     }
 
     private func requestPermissions() async {
         let videoGranted = await AVCaptureDevice.requestAccess(for: .video)
         let audioGranted = await AVCaptureDevice.requestAccess(for: .audio)
-        await MainActor.run {
-            permissionGranted = videoGranted && audioGranted
+        await MainActor.run { permissionGranted = videoGranted && audioGranted }
+    }
+}
+
+// MARK: - Camera Control Button
+
+struct CameraControlButton: View {
+    let icon: String
+    let label: String
+    let isActive: Bool
+    let activeColor: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 18, weight: .medium))
+                Text(label)
+                    .font(.system(size: 10, weight: .medium))
+            }
+            .foregroundStyle(isActive ? activeColor : .white.opacity(0.65))
+            .frame(width: 52, height: 52)
+            .background(
+                Circle().fill(isActive ? activeColor.opacity(0.18) : .white.opacity(0.08))
+            )
         }
     }
 }
 
-// MARK: - Mock Camera for Simulator
+// MARK: - Mock Camera
 
 struct MockCameraView: View {
-    @State private var shimmerOffset: CGFloat = -1
+    @State private var shimmerY: CGFloat = -1
 
     var body: some View {
         ZStack {
-            // Simulated dark room / nursery background
             LinearGradient(
                 colors: [
-                    Color(red: 0.08, green: 0.10, blue: 0.14),
-                    Color(red: 0.12, green: 0.10, blue: 0.18),
-                    Color(red: 0.06, green: 0.08, blue: 0.12)
+                    Color(red: 0.06, green: 0.08, blue: 0.11),
+                    Color(red: 0.10, green: 0.09, blue: 0.15),
+                    Color(red: 0.05, green: 0.07, blue: 0.10)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
 
-            // Simulated night-vision scene elements
-            VStack(spacing: 0) {
+            VStack {
                 Spacer()
-
-                // Crib outline
                 ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(.white.opacity(0.08), lineWidth: 1.5)
-                        .frame(width: 220, height: 140)
-
-                    // Baby silhouette
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(.white.opacity(0.06), lineWidth: 1)
+                        .frame(width: 200, height: 130)
                     Image(systemName: "figure.child")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.white.opacity(0.12))
-
-                    // Night vision scanline effect
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                colors: [.clear, .green.opacity(0.03), .clear],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                        .frame(height: 60)
-                        .offset(y: shimmerOffset * 70)
+                        .font(.system(size: 44))
+                        .foregroundStyle(.white.opacity(0.08))
                 }
-
                 Spacer()
             }
 
-            // Subtle noise overlay
+            // Scanline
             Rectangle()
-                .fill(.white.opacity(0.015))
+                .fill(LinearGradient(colors: [.clear, .green.opacity(0.025), .clear], startPoint: .top, endPoint: .bottom))
+                .frame(height: 50)
+                .offset(y: shimmerY * 200)
 
-            // Corner timestamp (like a real camera)
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
                     Text("CAM 1")
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.2))
-                        .padding(12)
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.15))
+                        .padding(10)
                 }
             }
         }
         .onAppear {
-            withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                shimmerOffset = 1
+            withAnimation(.easeInOut(duration: 4).repeatForever(autoreverses: true)) {
+                shimmerY = 1
             }
         }
     }
 }
 
-// MARK: - Real Camera Preview
+// MARK: - Camera Preview
 
 struct CameraPreviewView: UIViewRepresentable {
     let session: AVCaptureSession
@@ -291,7 +290,5 @@ struct CameraPreviewView: UIViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
-    class Coordinator {
-        var previewLayer: AVCaptureVideoPreviewLayer?
-    }
+    class Coordinator { var previewLayer: AVCaptureVideoPreviewLayer? }
 }

@@ -7,108 +7,96 @@ struct WatchAudioSourceView: View {
     @State private var extendedSession: WKExtendedRuntimeSession?
     @State private var elapsedSeconds = 0
     @State private var timer: Timer?
-    @State private var ringScale: CGFloat = 1.0
-    @State private var ringOpacity: Double = 0.5
 
     private var isAlert: Bool {
         captureManager.cryClassifier.isCrying || captureManager.soundAnalyzer.isCryDetected
     }
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 4) {
             Spacer()
 
-            // Animated mic indicator with sound level ring
+            // Animated indicator
             ZStack {
-                // Pulsing ring
-                Circle()
-                    .stroke(ringColor.opacity(0.3), lineWidth: 1.5)
-                    .frame(width: 50, height: 50)
-                    .scaleEffect(ringScale)
-                    .opacity(ringOpacity)
+                // Breathing ring
+                PulsingRing(color: ringColor)
+                    .frame(width: 44, height: 44)
 
-                // Sound level ring
+                // Sound level arc
                 Circle()
                     .trim(from: 0, to: CGFloat(captureManager.soundAnalyzer.currentLevel))
-                    .stroke(ringColor, lineWidth: 3)
-                    .frame(width: 48, height: 48)
+                    .stroke(ringColor, lineWidth: 2.5)
+                    .frame(width: 44, height: 44)
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeOut(duration: 0.1), value: captureManager.soundAnalyzer.currentLevel)
+                    .animation(.easeOut(duration: 0.08), value: captureManager.soundAnalyzer.currentLevel)
 
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(ringColor.opacity(0.15))
-                        .frame(width: 38, height: 38)
+                        .fill(ringColor.opacity(0.12))
+                        .frame(width: 34, height: 34)
                     Image(systemName: isAlert ? "exclamationmark.triangle.fill" : "mic.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(ringColor)
+                        .contentTransition(.symbolEffect(.replace))
                 }
             }
 
             // Status
-            VStack(spacing: 2) {
-                if captureManager.cryClassifier.isCrying {
-                    Text("Baby Crying!")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundStyle(BabymonTheme.warmPink)
-                } else if captureManager.soundAnalyzer.isCryDetected {
-                    Text("Sound Detected!")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundStyle(BabymonTheme.warmPink)
-                } else {
-                    Text(captureManager.cryClassifier.dominantSound)
-                        .font(.system(size: 13, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
+            VStack(spacing: 1) {
+                Group {
+                    if captureManager.cryClassifier.isCrying {
+                        Text("Baby Crying!")
+                            .foregroundStyle(BabymonTheme.warmPink)
+                    } else if captureManager.soundAnalyzer.isCryDetected {
+                        Text("Sound Detected!")
+                            .foregroundStyle(BabymonTheme.warmPink)
+                    } else {
+                        Text(captureManager.cryClassifier.dominantSound)
+                            .foregroundStyle(.white)
+                    }
                 }
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .contentTransition(.numericText())
 
                 Text(formattedTime)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.4))
-
-                // Level bar
-                SoundLevelBar(level: captureManager.soundAnalyzer.currentLevel)
-                    .frame(height: 4)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 4)
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.35))
             }
+
+            // Level bar
+            WatchSoundLevelBar(level: captureManager.soundAnalyzer.currentLevel)
+                .frame(height: 5)
+                .padding(.horizontal, 24)
+                .padding(.top, 2)
 
             Spacer()
 
-            // Stop button
-            Button {
-                stop()
-            } label: {
-                HStack(spacing: 4) {
+            // Stop
+            Button { stop() } label: {
+                HStack(spacing: 3) {
                     Image(systemName: "stop.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 9))
                     Text("Stop")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                 }
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(BabymonTheme.warmPink.opacity(0.8))
-                )
+                .padding(.vertical, 7)
+                .background(RoundedRectangle(cornerRadius: 10).fill(BabymonTheme.warmPink.opacity(0.8)))
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 16)
-            .padding(.bottom, 8)
+            .padding(.bottom, 4)
         }
         .onAppear {
             startExtendedSession()
-            captureManager.onAudioReady = { data in
-                connectivity.sendStreamData(data)
-            }
-            // Prefer classifier for cry alerts, fall back to RMS
+            captureManager.onAudioReady = { data in connectivity.sendStreamData(data) }
             captureManager.cryClassifier.onCryDetected = {
                 connectivity.sendCryAlert()
                 WKInterfaceDevice.current().play(.notification)
             }
             captureManager.soundAnalyzer.onCryDetected = {
-                // Only use RMS fallback if classifier hasn't already fired
                 if !captureManager.cryClassifier.isCrying {
                     connectivity.sendCryAlert()
                     WKInterfaceDevice.current().play(.notification)
@@ -116,15 +104,8 @@ struct WatchAudioSourceView: View {
             }
             captureManager.startCapture()
             startTimer()
-
-            withAnimation(.easeOut(duration: 1.5).repeatForever(autoreverses: false)) {
-                ringScale = 2.0
-                ringOpacity = 0
-            }
         }
-        .onDisappear {
-            stop()
-        }
+        .onDisappear { stop() }
     }
 
     private var ringColor: Color {
@@ -138,18 +119,15 @@ struct WatchAudioSourceView: View {
     }
 
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            elapsedSeconds += 1
-        }
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in elapsedSeconds += 1 }
     }
 
     private func stop() {
         timer?.invalidate()
-        timer = nil
         captureManager.stopCapture()
         extendedSession?.invalidate()
         extendedSession = nil
-        connectivity.currentMode = nil
+        withAnimation { connectivity.currentMode = nil }
     }
 
     private func startExtendedSession() {
@@ -159,19 +137,18 @@ struct WatchAudioSourceView: View {
     }
 }
 
-struct SoundLevelBar: View {
+struct WatchSoundLevelBar: View {
     let level: Float
 
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(.white.opacity(0.1))
-
-                RoundedRectangle(cornerRadius: 2)
+                RoundedRectangle(cornerRadius: 2.5)
+                    .fill(.white.opacity(0.08))
+                RoundedRectangle(cornerRadius: 2.5)
                     .fill(barColor)
-                    .frame(width: geo.size.width * CGFloat(level))
-                    .animation(.easeOut(duration: 0.1), value: level)
+                    .frame(width: max(geo.size.width * CGFloat(level), 2))
+                    .animation(.easeOut(duration: 0.08), value: level)
             }
         }
     }

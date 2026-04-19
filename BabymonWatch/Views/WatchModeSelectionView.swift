@@ -5,45 +5,42 @@ struct WatchModeSelectionView: View {
     @State private var appeared = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 14) {
-                // Header
-                VStack(spacing: 4) {
-                    Image(systemName: "moon.stars.fill")
-                        .font(.system(size: 24))
-                        .foregroundStyle(BabymonTheme.accentGradient)
-                        .scaleEffect(appeared ? 1 : 0.5)
-                        .opacity(appeared ? 1 : 0)
+        VStack(spacing: 10) {
+            // Header
+            VStack(spacing: 3) {
+                Image(systemName: "moon.stars.fill")
+                    .font(.system(size: 22))
+                    .foregroundStyle(BabymonTheme.accentGradient)
+                    .scaleEffect(appeared ? 1 : 0.4)
+                    .opacity(appeared ? 1 : 0)
 
-                    Text("Babymon")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                }
-                .padding(.top, 4)
+                Text("Babymon")
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+            }
 
-                // Status
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(connectivity.isReachable ? BabymonTheme.softGreen : BabymonTheme.warmOrange)
-                        .frame(width: 6, height: 6)
-                    Text(connectivity.isReachable ? "iPhone Connected" : "Searching...")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(connectivity.isReachable ? BabymonTheme.softGreen : BabymonTheme.warmOrange)
-                }
-                .opacity(appeared ? 1 : 0)
+            // Status
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(connectivity.isReachable ? BabymonTheme.softGreen : BabymonTheme.warmOrange)
+                    .frame(width: 5, height: 5)
+                Text(connectivity.isReachable ? "Connected" : "Searching...")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(connectivity.isReachable ? BabymonTheme.softGreen : BabymonTheme.warmOrange)
+            }
+            .opacity(appeared ? 1 : 0)
 
-                // Mode buttons
+            // Buttons
+            VStack(spacing: 8) {
                 WatchModeButton(
                     icon: "video.fill",
                     title: "Watch Baby",
                     color: BabymonTheme.accent,
                     disabled: !connectivity.isReachable
                 ) {
-                    connectivity.currentMode = .phoneSource
+                    withAnimation { connectivity.currentMode = .phoneSource }
                     connectivity.sendModeSelection(.phoneSource)
                 }
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 10)
 
                 WatchModeButton(
                     icon: "mic.fill",
@@ -51,16 +48,16 @@ struct WatchModeSelectionView: View {
                     color: BabymonTheme.softGreen,
                     disabled: !connectivity.isReachable
                 ) {
-                    connectivity.currentMode = .watchSource
+                    withAnimation { connectivity.currentMode = .watchSource }
                     connectivity.sendModeSelection(.watchSource)
                 }
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 15)
             }
-            .padding(.horizontal, 4)
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 8)
         }
+        .padding(.horizontal, 2)
         .onAppear {
-            withAnimation(.spring(duration: 0.6, bounce: 0.3)) {
+            withAnimation(.spring(duration: 0.5, bounce: 0.25)) {
                 appeared = true
             }
         }
@@ -76,31 +73,25 @@ struct WatchModeButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 10) {
+            HStack(spacing: 9) {
                 Image(systemName: icon)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(color)
-                    .frame(width: 28, height: 28)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(color.opacity(0.2))
-                    )
+                    .frame(width: 26, height: 26)
+                    .background(RoundedRectangle(cornerRadius: 7).fill(color.opacity(0.15)))
 
                 Text(title)
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
 
                 Spacer()
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(BabymonTheme.watchCardBg)
-            )
+            .padding(.horizontal, 10)
+            .padding(.vertical, 9)
+            .background(RoundedRectangle(cornerRadius: 12).fill(BabymonTheme.watchCardBg))
         }
         .buttonStyle(.plain)
-        .opacity(disabled ? 0.4 : 1)
+        .opacity(disabled ? 0.35 : 1)
         .disabled(disabled)
     }
 }
