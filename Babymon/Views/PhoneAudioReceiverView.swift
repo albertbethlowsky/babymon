@@ -93,10 +93,10 @@ struct PhoneAudioReceiverView: View {
                     VStack(alignment: .leading, spacing: 1) {
                         Text("Apple Watch Microphone")
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                         Text("Streaming audio in real-time")
                             .font(.system(size: 11))
-                            .foregroundStyle(.white.opacity(0.35))
+                            .foregroundStyle(.secondary)
                     }
                     Spacer()
                     Circle()
@@ -107,7 +107,7 @@ struct PhoneAudioReceiverView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 14)
                         .fill(BabymonTheme.cardBg)
-                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.04), lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BabymonTheme.hairline, lineWidth: 1))
                 )
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -126,7 +126,7 @@ struct PhoneAudioReceiverView: View {
                             .foregroundStyle(BabymonTheme.softGreen)
                         Text("Alerts enabled when phone is locked")
                             .font(.system(size: 11))
-                            .foregroundStyle(.white.opacity(0.35))
+                            .foregroundStyle(.secondary)
                     }
                     .padding(.top, 16)
                 }
@@ -177,10 +177,10 @@ struct PhoneAudioReceiverView: View {
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Enable Notifications")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                     Text("Get alerted even when your phone is locked.")
                         .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .foregroundStyle(.secondary)
                 }
             }
 
