@@ -338,7 +338,7 @@ struct SoundMeter: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 3)
-                    .fill(.white.opacity(0.05))
+                    .fill(BabymonTheme.hairline)
                 RoundedRectangle(cornerRadius: 3)
                     .fill(LinearGradient(
                         colors: [BabymonTheme.softGreen, BabymonTheme.warmOrange, BabymonTheme.warmPink],
