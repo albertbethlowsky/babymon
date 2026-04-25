@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
+    @EnvironmentObject var theme: ThemeManager
 
     var body: some View {
         ZStack {
@@ -23,6 +24,6 @@ struct ContentView: View {
             }
             .animation(.spring(duration: 0.35, bounce: 0.15), value: connectivity.currentMode == nil)
         }
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(theme.colorScheme)
     }
 }

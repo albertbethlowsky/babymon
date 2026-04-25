@@ -20,9 +20,9 @@ struct PhoneAudioReceiverView: View {
                     Button { stop() } label: {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.5))
+                            .foregroundStyle(.secondary)
                             .frame(width: 34, height: 34)
-                            .background(Circle().fill(.white.opacity(0.07)))
+                            .background(Circle().fill(BabymonTheme.cardBg.opacity(0.7)))
                     }
 
                     Spacer()
@@ -31,7 +31,7 @@ struct PhoneAudioReceiverView: View {
 
                     Text(formattedTime)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .foregroundStyle(.secondary)
                         .fixedSize()
                 }
                 .padding(.horizontal, 20)
@@ -54,7 +54,7 @@ struct PhoneAudioReceiverView: View {
 
                         Text(showCryAlert ? "Baby\nCrying" : detectedSound)
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.75))
+                            .foregroundStyle(.primary)
                             .multilineTextAlignment(.center)
                             .contentTransition(.numericText())
                     }
@@ -69,7 +69,7 @@ struct PhoneAudioReceiverView: View {
                     HStack {
                         Text("Sound Level")
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.35))
+                            .foregroundStyle(.secondary)
                         Spacer()
                         Text(soundLevelText)
                             .font(.system(size: 11, weight: .semibold))

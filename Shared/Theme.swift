@@ -1,4 +1,32 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
+
+private func adaptiveColor(
+    dark: (Double, Double, Double, Double) = (0, 0, 0, 1),
+    light: (Double, Double, Double, Double) = (0, 0, 0, 1)
+) -> Color {
+    #if canImport(UIKit)
+    return Color(UIColor { trait in
+        let c = trait.userInterfaceStyle == .light ? light : dark
+        return UIColor(red: CGFloat(c.0), green: CGFloat(c.1), blue: CGFloat(c.2), alpha: CGFloat(c.3))
+    })
+    #else
+    let c = dark
+    return Color(red: c.0, green: c.1, blue: c.2).opacity(c.3)
+    #endif
+}
+
+private func adaptiveColor(
+    dark: (Double, Double, Double),
+    light: (Double, Double, Double)
+) -> Color {
+    adaptiveColor(
+        dark: (dark.0, dark.1, dark.2, 1),
+        light: (light.0, light.1, light.2, 1)
+    )
+}
 
 enum BabymonTheme {
     // Core palette — warm, calming tones
@@ -8,11 +36,29 @@ enum BabymonTheme {
     static let softGreen = Color(red: 0.35, green: 0.78, blue: 0.65)
     static let softBlue = Color(red: 0.4, green: 0.65, blue: 0.95)
     static let warmOrange = Color(red: 0.95, green: 0.6, blue: 0.35)
-    static let darkBg = Color(red: 0.08, green: 0.07, blue: 0.14)
-    static let cardBg = Color(red: 0.12, green: 0.11, blue: 0.20)
+
+    // Adaptive backgrounds: deep night palette in dark mode, soft lavender in light mode.
+    static let darkBg = adaptiveColor(
+        dark: (0.08, 0.07, 0.14),
+        light: (0.96, 0.95, 0.99)
+    )
+    static let cardBg = adaptiveColor(
+        dark: (0.12, 0.11, 0.20),
+        light: (1.00, 1.00, 1.00)
+    )
+    private static let bgGradientEnd = adaptiveColor(
+        dark: (0.10, 0.08, 0.18),
+        light: (0.92, 0.91, 0.97)
+    )
+
+    /// Subtle hairline used for card outlines. White-on-dark, black-on-light.
+    static let hairline = adaptiveColor(
+        dark: (1.0, 1.0, 1.0, 0.05),
+        light: (0.0, 0.0, 0.0, 0.06)
+    )
 
     static let backgroundGradient = LinearGradient(
-        colors: [darkBg, Color(red: 0.10, green: 0.08, blue: 0.18)],
+        colors: [darkBg, bgGradientEnd],
         startPoint: .top,
         endPoint: .bottom
     )

@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct BabymonApp: App {
     @StateObject private var connectivity = ConnectivityManager.shared
+    @StateObject private var theme = ThemeManager()
 
     init() {
         ConnectivityManager.shared.activate()
@@ -15,6 +16,7 @@ struct BabymonApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(connectivity)
+                .environmentObject(theme)
         }
     }
 }

@@ -3,11 +3,30 @@ import SwiftUI
 struct ModeSelectionView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
     @State private var appeared = false
+    @State private var showSettings = false
 
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 VStack(spacing: 0) {
+                    // Top bar
+                    HStack {
+                        Spacer()
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 36, height: 36)
+                                .background(Circle().fill(BabymonTheme.cardBg.opacity(0.7)))
+                                .overlay(Circle().stroke(BabymonTheme.hairline, lineWidth: 1))
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, max(geo.safeAreaInsets.top + 4, 12))
+                    .opacity(appeared ? 1 : 0)
+
                     // Hero
                     VStack(spacing: 8) {
                         ZStack {
@@ -23,15 +42,15 @@ struct ModeSelectionView: View {
 
                         Text("Babymon")
                             .font(.system(size: 28, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                             .opacity(appeared ? 1 : 0)
 
                         Text("Keep an eye on your little one")
                             .font(.system(size: 14))
-                            .foregroundStyle(.white.opacity(0.45))
+                            .foregroundStyle(.secondary)
                             .opacity(appeared ? 1 : 0)
                     }
-                    .padding(.top, max(geo.safeAreaInsets.top + 8, 32))
+                    .padding(.top, 8)
                     .padding(.bottom, 20)
                     .onLongPressGesture(minimumDuration: 2) {
                         if !connectivity.isDemoMode {
@@ -76,7 +95,7 @@ struct ModeSelectionView: View {
                     if !connectivity.isReachable && !connectivity.isDemoMode {
                         Text("Open Babymon on your Apple Watch to connect")
                             .font(.caption2)
-                            .foregroundStyle(.white.opacity(0.3))
+                            .foregroundStyle(.tertiary)
                             .multilineTextAlignment(.center)
                             .padding(.top, 24)
                     }
@@ -98,6 +117,9 @@ struct ModeSelectionView: View {
             withAnimation(.spring(duration: 0.6, bounce: 0.25)) {
                 appeared = true
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
     }
 }
@@ -127,10 +149,10 @@ struct ModeCard: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
                         .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                     Text(subtitle)
                         .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
 
@@ -138,7 +160,7 @@ struct ModeCard: View {
 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.2))
+                    .foregroundStyle(.tertiary)
             }
             .padding(14)
             .background(
@@ -146,7 +168,7 @@ struct ModeCard: View {
                     .fill(BabymonTheme.cardBg)
                     .overlay(
                         RoundedRectangle(cornerRadius: 18)
-                            .stroke(.white.opacity(0.05), lineWidth: 1)
+                            .stroke(BabymonTheme.hairline, lineWidth: 1)
                     )
             )
             .scaleEffect(isPressed ? 0.97 : 1)
