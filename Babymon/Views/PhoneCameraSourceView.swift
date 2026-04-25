@@ -100,11 +100,11 @@ struct PhoneCameraSourceView: View {
 
                     Text("Camera Access Required")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
 
                     Text("Babymon needs camera and microphone\naccess to monitor your baby.")
                         .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
 
                     Button {
@@ -124,7 +124,7 @@ struct PhoneCameraSourceView: View {
                         withAnimation { connectivity.currentMode = nil }
                     }
                     .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.4))
+                    .foregroundStyle(.tertiary)
                 }
             }
         }
@@ -218,36 +218,29 @@ struct CameraControlButton: View {
 // MARK: - Mock Camera
 
 struct MockCameraView: View {
+    @Environment(\.colorScheme) private var scheme
     @State private var shimmerY: CGFloat = -1
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.06, green: 0.08, blue: 0.11),
-                    Color(red: 0.10, green: 0.09, blue: 0.15),
-                    Color(red: 0.05, green: 0.07, blue: 0.10)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            BabymonTheme.backgroundGradient
 
             VStack {
                 Spacer()
                 ZStack {
                     RoundedRectangle(cornerRadius: 14)
-                        .stroke(.white.opacity(0.06), lineWidth: 1)
+                        .stroke(BabymonTheme.hairline, lineWidth: 1)
                         .frame(width: 200, height: 130)
                     Image(systemName: "figure.child")
                         .font(.system(size: 44))
-                        .foregroundStyle(.white.opacity(0.08))
+                        .foregroundStyle(.tertiary)
                 }
                 Spacer()
             }
 
             // Scanline
             Rectangle()
-                .fill(LinearGradient(colors: [.clear, .green.opacity(0.025), .clear], startPoint: .top, endPoint: .bottom))
+                .fill(LinearGradient(colors: [.clear, scanlineTint, .clear], startPoint: .top, endPoint: .bottom))
                 .frame(height: 50)
                 .offset(y: shimmerY * 200)
 
@@ -257,7 +250,7 @@ struct MockCameraView: View {
                     Spacer()
                     Text("CAM 1")
                         .font(.system(size: 10, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.15))
+                        .foregroundStyle(.tertiary)
                         .padding(10)
                 }
             }
@@ -267,6 +260,10 @@ struct MockCameraView: View {
                 shimmerY = 1
             }
         }
+    }
+
+    private var scanlineTint: Color {
+        scheme == .light ? BabymonTheme.accent.opacity(0.04) : .green.opacity(0.025)
     }
 }
 

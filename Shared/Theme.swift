@@ -1,5 +1,5 @@
 import SwiftUI
-#if canImport(UIKit)
+#if os(iOS)
 import UIKit
 #endif
 
@@ -7,12 +7,13 @@ private func adaptiveColor(
     dark: (Double, Double, Double, Double) = (0, 0, 0, 1),
     light: (Double, Double, Double, Double) = (0, 0, 0, 1)
 ) -> Color {
-    #if canImport(UIKit)
+    #if os(iOS)
     return Color(UIColor { trait in
         let c = trait.userInterfaceStyle == .light ? light : dark
         return UIColor(red: CGFloat(c.0), green: CGFloat(c.1), blue: CGFloat(c.2), alpha: CGFloat(c.3))
     })
     #else
+    // watchOS is dark-only; honor the dark variant.
     let c = dark
     return Color(red: c.0, green: c.1, blue: c.2).opacity(c.3)
     #endif
