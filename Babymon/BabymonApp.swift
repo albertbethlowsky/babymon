@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct BabymonApp: App {
@@ -18,5 +19,6 @@ struct BabymonApp: App {
                 .environmentObject(connectivity)
                 .environmentObject(theme)
         }
+        .modelContainer(for: [SleepSession.self, WakeEvent.self])
     }
 }

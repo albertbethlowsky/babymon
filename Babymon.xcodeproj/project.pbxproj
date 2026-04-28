@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		11FDAAC5D05DAD2E650EA75F /* StreamingProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5DF20E1990F361F035C0E3 /* StreamingProtocolTests.swift */; };
 		124C189401CC1C7D977343FE /* WatchAudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AE93F18D7BF9F6BF7D980 /* WatchAudioPlayerManager.swift */; };
+		19EF8313D1C2F938A82EF409 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D83E6D985D7401E015D764E /* SleepSession.swift */; };
 		22AF56839DF871D9A1F82E5A /* WatchAudioSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE400E998E1B54C9C3597DEC /* WatchAudioSourceView.swift */; };
 		2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */; };
 		2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9A42CC239946176FFD25B /* StreamingProtocol.swift */; };
@@ -21,6 +22,7 @@
 		6975F0864DCAE5DA2CB120BC /* WatchVideoReceiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */; };
 		6A8E414583C3432468907379 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F47F6A582694FCD8A17E68 /* AudioPlayerManager.swift */; };
 		6F23557F3AD4624A77371D56 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2096046B936E272C07B621 /* NotificationManager.swift */; };
+		704CD9C0F885DC49CBE3266F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E6C69CD82CF4DD95EA8C0E /* HistoryView.swift */; };
 		73A659E1752B43674BDF08B7 /* BabymonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274CE57EAD723B41D1C8A32 /* BabymonApp.swift */; };
 		79DFFF37E0A509D9B3FAF353 /* SoundLevelAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C93596DD9D7937B1D3A9A5F /* SoundLevelAnalyzer.swift */; };
 		7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
@@ -41,6 +43,7 @@
 		DF78002B6550C22F6B246252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EF483BA363B1D6F1358CFB /* Assets.xcassets */; };
 		E38CDAD4A0CBF3611343D4B5 /* WatchModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E62536DBD7C717768CC1220 /* WatchModeSelectionView.swift */; };
 		E493D232846FDDE9998B12E0 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A47599AC457030DD6C35B2 /* ConnectivityManager.swift */; };
+		E7411606A6E91EB8075F9A5B /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D83E6D985D7401E015D764E /* SleepSession.swift */; };
 		F7AFBE8B51F0A485ACF731F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5506FDF805A37D0CA9ED3E90 /* Assets.xcassets */; };
 		FABC577BD671923169396A7B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE53017850CFAEA6ED0678A /* ContentView.swift */; };
 		FCE25C38D28EA15E5946E2C5 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97ABBE0D45354E6B1B6192B /* WatchContentView.swift */; };
@@ -57,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00E6C69CD82CF4DD95EA8C0E /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		021E745A181A584EADA75455 /* SoundLevelAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLevelAnalyzerTests.swift; sourceTree = "<group>"; };
 		09D9A42CC239946176FFD25B /* StreamingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingProtocol.swift; sourceTree = "<group>"; };
 		1507C3223FDA1F4A2EABBD52 /* Babymon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Babymon.entitlements; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 		8309601210C8FB1E659ACF43 /* WatchAudioCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioCaptureManager.swift; sourceTree = "<group>"; };
 		84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAudioReceiverView.swift; sourceTree = "<group>"; };
 		8CE53017850CFAEA6ED0678A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8D83E6D985D7401E015D764E /* SleepSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSession.swift; sourceTree = "<group>"; };
 		8F852592B992EAF5F8C7B06C /* BabymonWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabymonWatchApp.swift; sourceTree = "<group>"; };
 		9A5DF20E1990F361F035C0E3 /* StreamingProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingProtocolTests.swift; sourceTree = "<group>"; };
 		9B9CC281A270F4A8DAAADCDC /* WatchVideoReceiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchVideoReceiverView.swift; sourceTree = "<group>"; };
@@ -156,6 +161,7 @@
 				20946299DED9CC21D4CC6507 /* CryClassifier.swift */,
 				6A2096046B936E272C07B621 /* NotificationManager.swift */,
 				7E7CC950C6207B1F03CBBE1C /* SessionMode.swift */,
+				8D83E6D985D7401E015D764E /* SleepSession.swift */,
 				1C93596DD9D7937B1D3A9A5F /* SoundLevelAnalyzer.swift */,
 				09D9A42CC239946176FFD25B /* StreamingProtocol.swift */,
 				72F3748EB8367166DBB81869 /* Theme.swift */,
@@ -176,6 +182,7 @@
 		900308892660E9950E2D1A84 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				00E6C69CD82CF4DD95EA8C0E /* HistoryView.swift */,
 				4373BED90F8E0C8F139E61E0 /* ModeSelectionView.swift */,
 				84A94ECE8BDB73A375C35B4F /* PhoneAudioReceiverView.swift */,
 				BBAE65438ECDB75E23DC84FA /* PhoneCameraSourceView.swift */,
@@ -336,12 +343,14 @@
 				7C18268C76DE2E86AFEB738A /* ConnectivityManager.swift in Sources */,
 				FABC577BD671923169396A7B /* ContentView.swift in Sources */,
 				C982954A1A18F21E1181F7FA /* CryClassifier.swift in Sources */,
+				704CD9C0F885DC49CBE3266F /* HistoryView.swift in Sources */,
 				55323562D1488D2D73AFB01A /* ModeSelectionView.swift in Sources */,
 				D2C1B0E22A49183E86065038 /* NotificationManager.swift in Sources */,
 				B46204A144529E01C02623B1 /* PhoneAudioReceiverView.swift in Sources */,
 				2D3ABEF0F8C105459C6C3776 /* PhoneCameraSourceView.swift in Sources */,
 				4AD2B9B3AD73299D54FDB1D2 /* SessionMode.swift in Sources */,
 				3D970CC737E9C64B9ACA770A /* SettingsView.swift in Sources */,
+				E7411606A6E91EB8075F9A5B /* SleepSession.swift in Sources */,
 				79DFFF37E0A509D9B3FAF353 /* SoundLevelAnalyzer.swift in Sources */,
 				BDB4FBB96BE641D2ACDDA1E5 /* StreamingProtocol.swift in Sources */,
 				80FFAD337F6F7B5B5186AA86 /* Theme.swift in Sources */,
@@ -358,6 +367,7 @@
 				BFCFABC509D847F3B773CF12 /* CryClassifier.swift in Sources */,
 				6F23557F3AD4624A77371D56 /* NotificationManager.swift in Sources */,
 				9D0731B06087805FE71EF7A4 /* SessionMode.swift in Sources */,
+				19EF8313D1C2F938A82EF409 /* SleepSession.swift in Sources */,
 				561DB270F2154EC1CD88DED8 /* SoundLevelAnalyzer.swift in Sources */,
 				2F89C2AAB95B130FAC973932 /* StreamingProtocol.swift in Sources */,
 				3B7713809194FB558B8D8871 /* Theme.swift in Sources */,

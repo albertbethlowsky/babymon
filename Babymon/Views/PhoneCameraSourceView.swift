@@ -1,8 +1,10 @@
 import SwiftUI
+import SwiftData
 import AVFoundation
 
 struct PhoneCameraSourceView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var captureManager = CameraCaptureManager()
     @State private var permissionGranted = false
     @State private var appeared = false
@@ -10,6 +12,7 @@ struct PhoneCameraSourceView: View {
     @State private var timer: Timer?
     @State private var showControls = true
     @State private var controlsTimer: Timer?
+    @State private var session: SleepSession?
 
     private var isDemo: Bool { connectivity.isDemoMode }
 
@@ -130,6 +133,7 @@ struct PhoneCameraSourceView: View {
         }
         .task {
             if isDemo {
+                beginSleepSession()
                 startTimer()
                 scheduleControlsHide()
                 withAnimation(.easeOut(duration: 0.4)) { appeared = true }
@@ -140,6 +144,7 @@ struct PhoneCameraSourceView: View {
                 captureManager.onFrameReady = { data in connectivity.sendStreamData(data) }
                 captureManager.onAudioReady = { data in connectivity.sendStreamData(data) }
                 captureManager.startCapture()
+                beginSleepSession()
                 startTimer()
                 scheduleControlsHide()
                 withAnimation(.easeOut(duration: 0.4)) { appeared = true }
@@ -179,7 +184,27 @@ struct PhoneCameraSourceView: View {
         timer?.invalidate()
         controlsTimer?.invalidate()
         captureManager.stopCapture()
+        finalizeSleepSession()
         withAnimation { connectivity.currentMode = nil }
+    }
+
+    // MARK: - Sleep tracking
+
+    private func beginSleepSession() {
+        guard session == nil else { return }
+        let s = SleepSession(mode: "video")
+        modelContext.insert(s)
+        session = s
+    }
+
+    private func finalizeSleepSession() {
+        guard let s = session else { return }
+        s.endedAt = Date()
+        if s.duration < minSleepSessionDuration {
+            modelContext.delete(s)
+        }
+        try? modelContext.save()
+        session = nil
     }
 
     private func requestPermissions() async {

@@ -10,29 +10,72 @@ struct SettingsView: View {
                 BabymonTheme.backgroundGradient
                     .ignoresSafeArea()
 
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Appearance")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 4)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Appearance")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 4)
 
-                    VStack(spacing: 10) {
-                        ForEach(AppearanceOption.allCases) { option in
-                            AppearanceRow(
-                                option: option,
-                                selected: theme.appearance == option
-                            ) {
-                                withAnimation(.easeOut(duration: 0.18)) {
-                                    theme.appearance = option
+                        VStack(spacing: 10) {
+                            ForEach(AppearanceOption.allCases) { option in
+                                AppearanceRow(
+                                    option: option,
+                                    selected: theme.appearance == option
+                                ) {
+                                    withAnimation(.easeOut(duration: 0.18)) {
+                                        theme.appearance = option
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    Spacer()
+                        Text("Sleep")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 4)
+                            .padding(.top, 8)
+
+                        NavigationLink {
+                            HistoryView()
+                        } label: {
+                            HStack(spacing: 14) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 11)
+                                        .fill(BabymonTheme.accent.opacity(0.10))
+                                        .frame(width: 40, height: 40)
+                                    Image(systemName: "moon.zzz.fill")
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundStyle(BabymonTheme.accentLight)
+                                }
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Sleep History")
+                                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.primary)
+                                    Text("Sessions, wake-ups, duration")
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .padding(14)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(BabymonTheme.cardBg)
+                                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(BabymonTheme.hairline, lineWidth: 1))
+                            )
+                        }
+                        .buttonStyle(.plain)
+
+                        Spacer(minLength: 24)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
+                .scrollIndicators(.hidden)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

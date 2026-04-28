@@ -1,8 +1,10 @@
 import SwiftUI
+import SwiftData
 import UserNotifications
 
 struct PhoneAudioReceiverView: View {
     @EnvironmentObject var connectivity: ConnectivityManager
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var audioPlayer = AudioPlayerManager()
     @StateObject private var soundAnalyzer = SoundLevelAnalyzer()
     @State private var detectedSound: String = "All Quiet"
@@ -11,6 +13,7 @@ struct PhoneAudioReceiverView: View {
     @State private var timer: Timer?
     @State private var showCryAlert = false
     @State private var notificationsGranted = false
+    @State private var session: SleepSession?
 
     var body: some View {
         ScrollView {
@@ -157,6 +160,7 @@ struct PhoneAudioReceiverView: View {
             connectivity.onCryAlertReceived = { triggerCryAlert() }
             soundAnalyzer.onCryDetected = { triggerCryAlert() }
 
+            beginSleepSession()
             startTimer()
             withAnimation(.spring(duration: 0.5, bounce: 0.2)) { appeared = true }
         }
@@ -240,6 +244,7 @@ struct PhoneAudioReceiverView: View {
                 detectedSound = "Baby\nCrying"
             }
             NotificationManager.shared.sendCryAlert()
+            recordWakeEvent()
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 withAnimation(.spring(duration: 0.3)) {
                     showCryAlert = false
@@ -247,6 +252,36 @@ struct PhoneAudioReceiverView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Sleep tracking
+
+    private func beginSleepSession() {
+        guard session == nil else { return }
+        let s = SleepSession(mode: "audio")
+        modelContext.insert(s)
+        session = s
+    }
+
+    private func recordWakeEvent() {
+        guard let s = session else { return }
+        // Coalesce rapid re-triggers — the cry alert already debounces visually for 4s.
+        if let last = s.wakeEvents.max(by: { $0.timestamp < $1.timestamp }),
+           Date().timeIntervalSince(last.timestamp) < 10 {
+            return
+        }
+        let event = WakeEvent(timestamp: Date(), session: s)
+        modelContext.insert(event)
+    }
+
+    private func finalizeSleepSession() {
+        guard let s = session else { return }
+        s.endedAt = Date()
+        if s.duration < minSleepSessionDuration {
+            modelContext.delete(s)
+        }
+        try? modelContext.save()
+        session = nil
     }
 
     private func simulateDemoAudio() {
@@ -268,6 +303,7 @@ struct PhoneAudioReceiverView: View {
         audioPlayer.stop()
         connectivity.onAudioDataReceived = nil
         connectivity.onCryAlertReceived = nil
+        finalizeSleepSession()
         withAnimation { connectivity.currentMode = nil }
     }
 }
